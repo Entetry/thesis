@@ -4,13 +4,21 @@ const createTrialPlot = (data) => {
     alert("SOSAT + LEZHAT");
     request({
         method: 'POST',
-        url: '/path',
+        url: '/HEHE',
         data: data
     }).then(response => console.log(response))
 }
 
+const getAllRayons = () => {
+    request({
+        method: 'GET',
+        url: '/baseInfo/rayons'
+    }).then(response => console.log(response))
+};
+
 const TrialPlotService = {
-    createTrialPlot
+    createTrialPlot,
+    getAllRayons
 }
 
 export default TrialPlotService;
