@@ -1,11 +1,20 @@
 import React from 'react';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from "react-router-dom";
+import Main from './pages/Main/mainPage.js';
+import TrialPlot from './pages/TrialPlot/trialPage.js';
 
 function App() {
   return (
-   <>
-    <h1>HUY SOSI</h1>
-   </>
+   <Router>
+      <Redirect exact from="/" to="/main" />
+      <Route path="/main" component={Main}/>
+      <Route path="/trial-plot" component={TrialPlot}/>
+   </Router>
   );
 }
 

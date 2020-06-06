@@ -1,0 +1,12 @@
+#action-box {
+    background-color: #588c0d;
+    font-size: 44px;
+    color: #ffffff;
+    width:445px;
+    height: 310px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 80px;
+}

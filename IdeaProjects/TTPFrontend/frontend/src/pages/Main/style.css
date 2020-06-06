@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+#forest {
+    display: flex;
+    justify-content: center;
+}
+
+#forest img {
+    height: 100%;
+    width: 100%;
+}
