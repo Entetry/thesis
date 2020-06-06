@@ -1,0 +1,39 @@
+#container {
+    width: auto;
+}
+
+.base-title {
+    font-size: 36px;
+    font-family: Roboto Condensed !important;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.card-title {
+    display: flex;
+    justify-content: start;
+}
+
+.plot-info {
+    display: flex;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info p {
+    margin: 5px !important;
+}
+
+.dropdown {
+    display: block !important;
+    width: 200px !important;
+    height: 43px !important;
+    font-size: 25px !important;
+    margin-top: 5px !important;
+}

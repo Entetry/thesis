@@ -4,12 +4,12 @@ import * as globals from '../globalVariables.js';
 
 const client = axios.create({
     baseURL: globals.localhost,
+    "Access-Control-Allow-Origin": "*"
 })
 
 const request = (options) => {
     const onSuccess = (response) => {
         console.log('Request Successful!', response);
-        //probably not data
         return response.data;
     }
 
@@ -33,7 +33,7 @@ const request = (options) => {
       }
     
       return client(options)
-                .then(onSuccess)
+                .then(onSuccess).then(data => data)
                 .catch(onError);
 };
 
