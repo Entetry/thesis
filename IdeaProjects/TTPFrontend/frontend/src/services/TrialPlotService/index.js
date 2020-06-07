@@ -1,12 +1,11 @@
 import request from '../../http/http.js';
 
-const createTrialPlot = (data) => {
-    alert("SOSAT + LEZHAT");
+const createTrialPlot = data => {
     request({
         method: 'POST',
-        url: '/HEHE',
+        url: '/trialplots',
         data: data
-    }).then(response => console.log(response))
+    });
 }
 
 const getAllRayons = () => {

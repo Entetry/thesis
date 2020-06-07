@@ -32,8 +32,43 @@
 
 .dropdown {
     display: block !important;
-    width: 200px !important;
+    width: 273px !important;
     height: 43px !important;
     font-size: 25px !important;
-    margin-top: 5px !important;
+    margin: 9px !important;
+}
+
+
+.plot-dropdowns {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inputs p {
+    margin-right: 225px !important;
+}
+
+.inner-inputs {
+    margin-right: 86px;
+}
+
+#padded-form {
+    padding: 100px;
+}
+
+#submit-trial-plot-btn {
+    background-color: #588c0d;
+    width: 261px;
+    height: 110px;
+    margin-left: 359px;
+    margin-top: 100px;
+    border-radius: 38px;
+    color: white;
+    font-family: Roboto Condensed;
+    font-size: 24px;
 }
