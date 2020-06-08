@@ -1,10 +1,12 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import Header from '../../components/Header/header.js';
 import TrialPlotService from '../../services/TrialPlotService';
 import { Select, TextField, Button } from '@material-ui/core';
-
+// import history from 'history';
 import MenuItem from '@material-ui/core/MenuItem';
 import './style.css';
+import {appRoutes} from '../../globalVariables.js';
 
 class TrialPlot extends React.Component {
     state = {
@@ -18,13 +20,14 @@ class TrialPlot extends React.Component {
         selectedLesnichestvoName: '',
 
         trialPlotRequest: {
-            region: 0,
-            rayon: 0,
-            plho: 0,
-            leshos: 0,
+            regionId: 0,
+            rayonId: 0,
+            plhoId: 0,
+            leshosId: 0,
             lesnichestvo: 0,
             videl: 0,
-            ploshadProbi: 0,
+            ploshadProbi: '',
+            kvartal: '',
             ispolnitel: '',
             pochva: '',
             tym: '',
@@ -61,7 +64,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                region: e.target.value
+                regionId: e.target.value
             }
         }))
     }
@@ -74,7 +77,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                rayon: e.target.value
+                rayonId: e.target.value
             }
         }))
     }
@@ -87,7 +90,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                plho: e.target.value
+                plhoId: e.target.value
             }
         }))
     }
@@ -100,7 +103,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                leshos: e.target.value
+                leshosId: e.target.value
             }
         }))
     }
@@ -113,14 +116,45 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                lesnichestvo: e.target.value
+                lesnichestvoId: e.target.value
             }
         }))
     }
 
     sendRequest = data => {
-        console.log('REQUEST DATA', data);
-        TrialPlotService.createTrialPlot(data);
+        const response = TrialPlotService.createTrialPlot(data).then(d =>
+            {
+                console.log('FUCKING D', d);
+                this.setState(prevState => ({
+                    ...prevState,
+                    trialPlotRequest: d 
+                }))
+                this.props.history.push(appRoutes.editTrialPage, d);
+                return d;
+            });
+        
+
+        
+        
+        // return <Redirect
+        // to={{
+        //   pathname: appRoutes.editTrialPage,
+        // //   search: "?utm=your+face",
+        //   state: { trialPlotRequest: response }
+        // }}
+        // />
+    }
+
+    inputsOnChange = evt => {
+        const value = evt.target.value;
+        const state = this.state;
+        this.setState({
+            ...state,
+            trialPlotRequest: {
+                ...state.trialPlotRequest,
+                [evt.target.name]: value
+            },
+        });
     }
 
     render() {
@@ -196,43 +230,103 @@ class TrialPlot extends React.Component {
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Выдел</p>
-                                        <TextField id="standard-basic" label="Выдел" />
+                                        <TextField
+                                            id="standard-basic"
+                                            label="Выдел"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="videl"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Площадь пробы</p>
-                                        <TextField id="filled-basic" label="Площадь пробы" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Площадь пробы"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="ploshadProbi"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Квартал</p>
-                                        <TextField id="outlined-basic" label="Квартал" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Квартал"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="kvartal"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>ТУМ</p>
-                                        <TextField id="outlined-basic" label="ТУМ" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="TYM"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="tym"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Покров</p>
-                                        <TextField id="outlined-basic" label="Покров" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="pokrov"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="pokrov"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Положение и рельеф</p>
-                                        <TextField id="outlined-basic" label="Положение и рельеф" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Положение и рельеф"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="positionAndRelief"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Особенности древостоя</p>
-                                        <TextField id="outlined-basic" label="Особенности древостоя" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Особенности древостоя"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="osobennostiDrev"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Тип леса</p> 
-                                        <TextField id="outlined-basic" label="Тип леса" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Тип леса"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="forestType"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Почва</p>
-                                        <TextField id="outlined-basic" label="Почва" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Почва"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="pochva"
+                                        />
                                     </div>
                                     <div className="inputs inner-inputs">
                                         <p>Исполнитель</p>
-                                        <TextField id="outlined-basic" label="Исполнитель" />
+                                        <TextField
+                                            id="filled-basic"
+                                            label="Испольнитель"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="ispolnitel"
+                                        />
                                     </div>
                                 </div>
                                 <Button id="submit-trial-plot-btn" variant="contained" type="submit">

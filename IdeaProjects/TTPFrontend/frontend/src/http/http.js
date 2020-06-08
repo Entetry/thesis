@@ -33,7 +33,7 @@ const request = (options) => {
       }
     
       return client(options)
-                .then(onSuccess).then(data => data)
+                .then(onSuccess)
                 .catch(onError);
 };
 
