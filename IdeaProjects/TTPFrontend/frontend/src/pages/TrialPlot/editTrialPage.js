@@ -20,9 +20,9 @@ class EditTrialPlot extends React.Component {
         console.log('STATE', this.state);
         console.log('PROPS', this.props);
         
-        const {
-            trialPlotRequest
-        } = this.props;
+        const trialPlotRequest = {
+            ...this.props.location.trialPlotRequest
+        };
 
         return(
             <>

@@ -1,26 +1,31 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
 import Header from '../../components/Header/header.js';
 import TrialPlotService from '../../services/TrialPlotService';
-import { Select, TextField, Button } from '@material-ui/core';
-// import history from 'history';
-import MenuItem from '@material-ui/core/MenuItem';
+import { MenuItem, TextField, Button } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Select from 'react-select';
+
 import './style.css';
 import {appRoutes} from '../../globalVariables.js';
+
 
 class TrialPlot extends React.Component {
     state = {
         regions: [],
         lesHoses: [],
         lesnichestvas: [],
-        selectedRegionId: -1,
+        tyms: [],
+        pokrovs: [],
+        forestTypes: [],
+        pochvas: [],
+        selectedRegion: null,
         selectedRayonName: '',
         selectedPLHOName: '',
         selectedLesHosName: '',
         selectedLesnichestvoName: '',
 
         trialPlotRequest: {
-            regionId: 0,
+            regionId: -1,
             rayonId: 0,
             plhoId: 0,
             leshosId: 0,
@@ -29,23 +34,33 @@ class TrialPlot extends React.Component {
             ploshadProbi: '',
             kvartal: '',
             ispolnitel: '',
-            pochva: '',
-            tym: '',
-            forestType: '',
+            pochvaId: 0,
+            tymId: 0,
+            forestTypeId: 0,
             osobennostiDrev: '',
-            pokrov: '',
+            pokrovId: 0,
             positionAndRelief: '',
         }
-        
     }
 
     async componentDidMount() {
         const regions = await TrialPlotService.getAllRegions();
         const lesHoses = await TrialPlotService.getAllLesHoses();
-        const lesnichestvas = await TrialPlotService.getAllLesnichestvas();  
+        const lesnichestvas = await TrialPlotService.getAllLesnichestvas();
+        const tyms = await TrialPlotService.getAllTyms();
+        const pokrovs = await TrialPlotService.getAllPokrovs();
+        const forestTypes = await TrialPlotService.getAllForestTypes();
+        const pochvas = await TrialPlotService.getAllPochvas();
         
-        this.setState({regions: regions, lesHoses: lesHoses, lesnichestvas: lesnichestvas});
-        console.log(this.state.regions);
+        this.setState({
+            regions: regions,
+            lesHoses: lesHoses,
+            lesnichestvas: lesnichestvas,
+            tyms: tyms,
+            pokrovs: pokrovs,
+            forestTypes: forestTypes,
+            pochvas: pochvas,
+        });
     }
 
     handleSubmit = e => {
@@ -56,98 +71,112 @@ class TrialPlot extends React.Component {
         this.sendRequest(trialPlotRequest);
     }
 
-    regionOnChange = e => {
-        e.preventDefault();
-        this.setState({selectedRegionId: e.target.value,});
-        
+    tymOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                regionId: e.target.value
+                tymId: opt.id
             }
         }))
     }
 
-    rayonOnChange = e => {
-        e.preventDefault();
-        this.setState({selectedRayonName: e.target.value});
-
+    pokrovOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                rayonId: e.target.value
+                tymId: opt.id
             }
         }))
     }
 
-    PLHOOnChange = e => {
-        e.preventDefault();
-        this.setState({selectedPLHOName: e.target.value});
-
+    forestTypeOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                plhoId: e.target.value
+                tymId: opt.id
             }
         }))
     }
 
-    lesHosOnChange = e => {
-        e.preventDefault();
-        this.setState({selectedLesHosName: e.target.value});
-
+    pochvaOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                leshosId: e.target.value
+                tymId: opt.id
+            }
+        }))
+    } 
+
+    regionOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                regionId: opt.id
             }
         }))
     }
 
-    lesnichestvoOnChange = e => {
-        e.preventDefault();
-        this.setState({selectedLesnichestvoName: e.target.value});
-
+    rayonOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                lesnichestvoId: e.target.value
+                rayonId: opt.id
+            }
+        }))
+    }
+
+    PLHOOnChange = (e, opt) => {
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                plhoId: opt.id
+            }
+        }))
+    }
+
+    lesHosOnChange = (e, opt) => {
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                leshosId: opt.id
+            }
+        }))
+    }
+
+    lesnichestvoOnChange = (e, opt) => {
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                lesnichestvoId: opt.id
             }
         }))
     }
 
     sendRequest = data => {
-        const response = TrialPlotService.createTrialPlot(data).then(d =>
+        TrialPlotService.createTrialPlot(data).then(d =>
             {
-                console.log('FUCKING D', d);
-                this.setState(prevState => ({
-                    ...prevState,
-                    trialPlotRequest: d 
-                }))
                 this.props.history.push(appRoutes.editTrialPage, d);
-                return d;
             });
-        
-
-        
-        
-        // return <Redirect
-        // to={{
-        //   pathname: appRoutes.editTrialPage,
-        // //   search: "?utm=your+face",
-        //   state: { trialPlotRequest: response }
-        // }}
-        // />
     }
 
     inputsOnChange = evt => {
         const value = evt.target.value;
         const state = this.state;
+
         this.setState({
             ...state,
             trialPlotRequest: {
@@ -160,13 +189,13 @@ class TrialPlot extends React.Component {
     render() {
         const {
             regions,
-            selectedRegionId,
-            selectedRayonName,
-            selectedLesHosName,
-            selectedLesnichestvoName,
-            selectedPLHOName,
             lesHoses,
+            pokrovs,
             lesnichestvas,
+            tyms,
+            trialPlotRequest,
+            forestTypes,
+            pochvas
         } = this.state;
 
         return(
@@ -186,51 +215,109 @@ class TrialPlot extends React.Component {
                                     <div className="inputs">
                                         <p>Область</p>
                                         <div className="inner-select">
-                                        <Select className="dropdown" value={selectedRegionId} onChange={this.regionOnChange}>
-                                            {regions.map(x => {
-                                                
-                                                return <MenuItem className="base-title" value={x.id}>{x.name}</MenuItem>
-                                            })}
-                                        </Select>
+                                            <Autocomplete
+                                                className="dropdown"
+                                                options={regions}
+                                                getOptionLabel={option => option.name}
+                                                id="regions"
+                                                onChange={this.regionOnChange}
+                                                renderInput={params => 
+                                                {
+                                                    return <TextField
+                                                    {...params}
+                                                    id="filled-basic"
+                                                    label="Области"
+                                                    className="base-title"
+                                                    type="text"
+                                                    name="regions" />
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                     <div className="inputs">
                                         <p>Район</p>
-                                        <Select className="dropdown base-title" value={selectedRayonName} onChange={this.rayonOnChange}>
-                                            {selectedRegionId == -1 ? null : regions.find(y => y.id == selectedRegionId).rayonList.map(y => 
-                                                    <MenuItem value={y.id}>{y.name}</MenuItem>
-                                                )
-                                            }
-                                        </Select>
+                                        <Autocomplete
+                                                className="dropdown"
+                                                options={trialPlotRequest.regionId == -1 ? [] : regions.find(y => y.id == trialPlotRequest.regionId).rayonList}
+                                                getOptionLabel={option => option.name}
+                                                id="rayon"
+                                                onChange={this.rayonOnChange}
+                                                renderInput={params => 
+                                                {
+                                                    return <TextField
+                                                    {...params}
+                                                    id="filled-basic"
+                                                    label="Район"
+                                                    className="base-title"
+                                                    type="text"
+                                                    name="rayons" />
+                                                }}
+                                        />
                                     </div>
                                     <div className="inputs">
                                         <p>ПЛХО</p>
-                                        <Select className="dropdown base-title" value={selectedPLHOName} onChange={this.PLHOOnChange}>
-                                            {selectedRegionId == -1 ? null : regions.find(y => y.id == selectedRegionId).plhoList.map(y => 
-                                                    <MenuItem value={y.id}>{y.plho}</MenuItem>
-                                                )
-                                            }
-                                        </Select>
+                                        <Autocomplete
+                                            className="dropdown"
+                                            options={trialPlotRequest.regionId == -1 ? [] : regions.find(y => y.id == trialPlotRequest.regionId).plhoList}
+                                            getOptionLabel={option => option.plho}
+                                            id="plho"
+                                            onChange={this.PLHOOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="ПЛХО"
+                                                className="base-title"
+                                                type="text"
+                                                name="plho" />
+                                            }}
+                                        />
                                     </div>
                                     <div className="inputs">
                                         <p>Лесхоз</p>
-                                        <Select className="dropdown base-title" value={selectedLesHosName} onChange={this.lesHosOnChange}>
-                                            {lesHoses.map(x => {
-                                                return <MenuItem value={x.id}>{x.name}</MenuItem>
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            className="dropdown"
+                                            options={lesHoses}
+                                            getOptionLabel={option => option.name}
+                                            id="lesHoses"
+                                            onChange={this.lesHosOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Лесхоз"
+                                                className="base-title"
+                                                type="text"
+                                                name="lesHoses" />
+                                            }}
+                                        />
                                     </div>
                                     <div className="inputs">
                                         <p>Лесничество</p>
-                                        <Select className="dropdown base-title" value={selectedLesnichestvoName} onChange={this.lesnichestvoOnChange}>
-                                            {lesnichestvas.map(x => {
-                                                return <MenuItem value={x.id}>{x.name}</MenuItem>
-                                            })}
-                                        </Select>
+                                        <Autocomplete
+                                            className="dropdown"
+                                            options={lesnichestvas}
+                                            getOptionLabel={option => option.name == null || option.name == undefined ? '' : option.name}
+                                            id="lesnichestvas"
+                                            onChange={this.lesnichestvoOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Лесничетсва"
+                                                className="base-title"
+                                                type="text"
+                                                name="lesnichestvas" />
+                                            }}
+                                        />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Выдел</p>
                                         <TextField
+                                            className="tym"
                                             id="standard-basic"
                                             label="Выдел"
                                             onChange={this.inputsOnChange}
@@ -238,9 +325,10 @@ class TrialPlot extends React.Component {
                                             name="videl"
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Площадь пробы</p>
                                         <TextField
+                                            className="tym"
                                             id="filled-basic"
                                             label="Площадь пробы"
                                             onChange={this.inputsOnChange}
@@ -248,9 +336,10 @@ class TrialPlot extends React.Component {
                                             name="ploshadProbi"
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Квартал</p>
                                         <TextField
+                                            className="tym"
                                             id="filled-basic"
                                             label="Квартал"
                                             onChange={this.inputsOnChange}
@@ -258,29 +347,48 @@ class TrialPlot extends React.Component {
                                             name="kvartal"
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>ТУМ</p>
-                                        <TextField
-                                            id="filled-basic"
-                                            label="TYM"
-                                            onChange={this.inputsOnChange}
-                                            type="text"
-                                            name="tym"
+                                        <Autocomplete
+                                            className="tym"
+                                            options={tyms}
+                                            getOptionLabel={option => option.name}
+                                            id="tym"
+                                            onChange={this.tymOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="TYM"
+                                                type="text"
+                                                name="tym" />
+                                            }}
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Покров</p>
-                                        <TextField
-                                            id="filled-basic"
-                                            label="pokrov"
-                                            onChange={this.inputsOnChange}
-                                            type="text"
-                                            name="pokrov"
+                                        <Autocomplete
+                                            className="tym"
+                                            options={pokrovs}
+                                            getOptionLabel={option => option.name}
+                                            id="pokrov"
+                                            onChange={this.pokrovOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Покров"
+                                                type="text"
+                                                name="pokrov" />
+                                            }}
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Положение и рельеф</p>
                                         <TextField
+                                            className="tym"
                                             id="filled-basic"
                                             label="Положение и рельеф"
                                             onChange={this.inputsOnChange}
@@ -288,9 +396,10 @@ class TrialPlot extends React.Component {
                                             name="positionAndRelief"
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Особенности древостоя</p>
                                         <TextField
+                                            className="tym"
                                             id="filled-basic"
                                             label="Особенности древостоя"
                                             onChange={this.inputsOnChange}
@@ -298,29 +407,48 @@ class TrialPlot extends React.Component {
                                             name="osobennostiDrev"
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
-                                        <p>Тип леса</p> 
-                                        <TextField
-                                            id="filled-basic"
-                                            label="Тип леса"
-                                            onChange={this.inputsOnChange}
-                                            type="text"
-                                            name="forestType"
+                                    <div className="inputs">
+                                        <p>Тип леса</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={forestTypes}
+                                            getOptionLabel={option => option.name}
+                                            id="pokrov"
+                                            onChange={this.forestTypeOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Тип леса"
+                                                type="text"
+                                                name="forestType" />
+                                            }}
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Почва</p>
-                                        <TextField
-                                            id="filled-basic"
-                                            label="Почва"
-                                            onChange={this.inputsOnChange}
-                                            type="text"
-                                            name="pochva"
+                                        <Autocomplete
+                                            className="tym"
+                                            options={pochvas}
+                                            getOptionLabel={option => option.name}
+                                            id="pochva"
+                                            onChange={this.pochvaOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Почва"
+                                                type="text"
+                                                name="pochva" />
+                                            }}
                                         />
                                     </div>
-                                    <div className="inputs inner-inputs">
+                                    <div className="inputs">
                                         <p>Исполнитель</p>
                                         <TextField
+                                            className="tym"
                                             id="filled-basic"
                                             label="Испольнитель"
                                             onChange={this.inputsOnChange}

@@ -50,11 +50,16 @@
 }
 
 .inputs p {
-    margin-right: 225px !important;
+    margin-right: 289px !important;
 }
 
 .inner-inputs {
     margin-right: 86px;
+}
+
+.tym {
+    margin-right: 9px !important;
+    width: 273px;
 }
 
 #padded-form {

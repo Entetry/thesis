@@ -6,10 +6,8 @@ const createTrialPlot = data => {
         url: '/trialplots',
         data: data
     }).then(data => {
-        console.log('DATA AFTER POST', data);
         return data;
     });
-
 }
 
 const getAllRayons = () => {
@@ -40,12 +38,44 @@ const getAllLesnichestvas = () => {
     }).then(data => data);
 }
 
+const getAllTyms = () => {
+    return request({
+        method: 'GET',
+        url: 'baseInfo/tyms'
+    }).then(data => data);
+}
+
+const getAllPokrovs = () => {
+    return request({
+        method: 'GET',
+        url: '/baseInfo/pokrovs'
+    }).then(data => data)
+}
+
+const getAllForestTypes = () => {
+    return request({
+        method: 'GET',
+        url: '/baseInfo/forestTypes'
+    }).then(data => data);
+}
+
+const getAllPochvas = () => {
+    return request({
+        method: 'GET',
+        url: '/baseInfo/pochvas'
+    }).then(data => data);
+}
+
 const TrialPlotService = {
     createTrialPlot,
     getAllRayons,
     getAllRegions,
     getAllLesHoses,
-    getAllLesnichestvas
+    getAllLesnichestvas,
+    getAllTyms,
+    getAllPokrovs,
+    getAllForestTypes,
+    getAllPochvas
 }
 
 export default TrialPlotService;
