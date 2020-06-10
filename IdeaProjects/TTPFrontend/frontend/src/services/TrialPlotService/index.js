@@ -66,6 +66,21 @@ const getAllPochvas = () => {
     }).then(data => data);
 }
 
+const getById = id => {
+    return request({
+        method: 'GET',
+        url: `/trialplots/${id}`
+    }).then(data => data)
+}
+
+const updateTrialPlot = requestData => {
+    return request({
+        method: 'PUT',
+        url: '/trialplots/',
+        data: requestData
+    }).then(response => response);
+}
+
 const TrialPlotService = {
     createTrialPlot,
     getAllRayons,
@@ -75,7 +90,9 @@ const TrialPlotService = {
     getAllTyms,
     getAllPokrovs,
     getAllForestTypes,
-    getAllPochvas
+    getAllPochvas,
+    getById,
+    updateTrialPlot
 }
 
 export default TrialPlotService;

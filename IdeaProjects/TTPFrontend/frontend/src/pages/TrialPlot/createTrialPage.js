@@ -1,9 +1,8 @@
 import React from 'react';
 import Header from '../../components/Header/header.js';
 import TrialPlotService from '../../services/TrialPlotService';
-import { MenuItem, TextField, Button } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Select from 'react-select';
 
 import './style.css';
 import {appRoutes} from '../../globalVariables.js';
@@ -88,7 +87,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                tymId: opt.id
+                pokrovId: opt.id
             }
         }))
     }
@@ -99,7 +98,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                tymId: opt.id
+                forestTypeId: opt.id
             }
         }))
     }
@@ -110,7 +109,7 @@ class TrialPlot extends React.Component {
             ...prevState,
             trialPlotRequest: {
                 ...prevState.trialPlotRequest,
-                tymId: opt.id
+                pochvaId: opt.id
             }
         }))
     } 
@@ -167,10 +166,10 @@ class TrialPlot extends React.Component {
     }
 
     sendRequest = data => {
-        TrialPlotService.createTrialPlot(data).then(d =>
-            {
-                this.props.history.push(appRoutes.editTrialPage, d);
-            });
+        TrialPlotService.createTrialPlot(data).then(response =>
+        {
+            this.props.history.push(appRoutes.editTrialPage, response);
+        });
     }
 
     inputsOnChange = evt => {
