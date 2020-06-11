@@ -17,13 +17,17 @@ class EditTrialPlot extends React.Component {
         forestTypes: [],
         pochvas: [],
         inputRegion: '',
+        inputRayon: '',
     }
 
     async componentDidMount() {
-        console.log('PROPPPPPPPS',this.props)
         const localTrialPlot = await TrialPlotService.getById(this.props.match.params.id);
 
-        this.setState({trialPlot: localTrialPlot, inputRegion: localTrialPlot.region.name});
+        this.setState({
+            trialPlot: localTrialPlot,
+            inputRegion: localTrialPlot.region.name,
+            inputRayon: localTrialPlot.rayon.name
+        });
     }
 
     editTrialPlot = () => {
@@ -131,10 +135,11 @@ class EditTrialPlot extends React.Component {
             }
         }))
 
-        this.setState({inputRegion: opt.name});
+        this.setState({inputRegion: opt == undefined ? '' : opt.name});
     }
 
     rayonOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlot: {
@@ -142,6 +147,8 @@ class EditTrialPlot extends React.Component {
                 rayon: opt
             }
         }))
+
+        this.setState({inputRayon: opt == undefined ? '' : opt.name});
     }
 
     PLHOOnChange = (e, opt) => {
@@ -174,23 +181,47 @@ class EditTrialPlot extends React.Component {
         }))
     }
 
-    sasi = (evt, regionName) => {
+    regionInputChange = (evt, name) => {
         const {regions} = this.state;
-
-        const region = regions.find(x => x.name === regionName);
+        const region = regions.find(x => x.name === name);
 
         if(region !== undefined){
             this.setState(prevState => ({
                 ...prevState,
                 trialPlot: {
                     ...prevState.trialPlot,
-                    region: region
+                    region: name
                 }
             }))
         }
         else{
             this.setState({
-                inputRegion: regionName
+                inputRegion: name
+            })
+        }
+    }
+
+    rayonInputChange = (evt, name) => {
+        const {regions, trialPlot} = this.state;
+        // const region = regions.find(x => x.rayonList.filter(y => y.name == name));
+        
+        const region = regions.find(x => x.name == trialPlot.region.name).rayonList.find(y => y.name == name);
+
+        console.log('REGION', region);
+        
+        
+        if(region !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    rayon: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputRayon: name
             })
         }
     }
@@ -200,14 +231,14 @@ class EditTrialPlot extends React.Component {
             isEditable,
             trialPlot,
             regions,
-            rayons,
             lesHoses,
             lesnichestvas,
             tyms,
             pokrovs,
             forestTypes,
             pochvas,
-            inputRegion
+            inputRegion,
+            inputRayon,
         } = this.state;
 
         return(
@@ -489,7 +520,7 @@ class EditTrialPlot extends React.Component {
                                             id="regions"
                                             onChange={this.regionOnChange}
                                             inputValue={inputRegion}
-                                            onInputChange={this.sasi}
+                                            onInputChange={this.regionInputChange}
                                             renderInput={params => 
                                             {
                                                 return <TextField
@@ -506,11 +537,14 @@ class EditTrialPlot extends React.Component {
                                 </div>
                                 <div className="inputs">
                                     <p>Район</p>
+                                    <div className="inner-select">
                                     <Autocomplete
                                             className="dropdown"
                                             options={trialPlot == null ? [] : trialPlot.region.rayonList}
                                             getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.rayon.name}
+                                            inputValue={inputRayon}
+                                            onChange={this.rayonOnChange}
+                                            onInputChange={this.rayonInputChange}
                                             id="rayon"
                                             renderInput={params => 
                                             {
@@ -523,6 +557,7 @@ class EditTrialPlot extends React.Component {
                                                 name="rayons" />
                                             }}
                                     />
+                                    </div>
                                 </div>
                                 <div className="inputs">
                                     <p>ПЛХО</p>
