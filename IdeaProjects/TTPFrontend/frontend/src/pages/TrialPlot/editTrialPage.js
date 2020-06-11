@@ -16,15 +16,18 @@ class EditTrialPlot extends React.Component {
         pokrovs: [],
         forestTypes: [],
         pochvas: [],
+        inputRegion: '',
     }
 
     async componentDidMount() {
-        const localTrialPlot = await TrialPlotService.getById(this.props.location.state.id);
+        console.log('PROPPPPPPPS',this.props)
+        const localTrialPlot = await TrialPlotService.getById(this.props.match.params.id);
 
-        this.setState({trialPlot: localTrialPlot});
+        this.setState({trialPlot: localTrialPlot, inputRegion: localTrialPlot.region.name});
     }
 
     editTrialPlot = () => {
+        window.scroll(0, 0);
         const {isEditable} = this.state;
 
         TrialPlotService.getAllRegions().then(regions => {
@@ -100,8 +103,8 @@ class EditTrialPlot extends React.Component {
         if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 forestType: opt
             }
         }))
@@ -111,8 +114,8 @@ class EditTrialPlot extends React.Component {
         if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 pochva: opt
             }
         }))
@@ -122,18 +125,20 @@ class EditTrialPlot extends React.Component {
         if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 region: opt
             }
         }))
+
+        this.setState({inputRegion: opt.name});
     }
 
     rayonOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 rayon: opt
             }
         }))
@@ -142,8 +147,8 @@ class EditTrialPlot extends React.Component {
     PLHOOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 plho: opt
             }
         }))
@@ -152,8 +157,8 @@ class EditTrialPlot extends React.Component {
     lesHosOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 leshos: opt
             }
         }))
@@ -162,22 +167,32 @@ class EditTrialPlot extends React.Component {
     lesnichestvoOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
-            trialPlotRequest: {
-                ...prevState.trialPlotRequest,
+            trialPlot: {
+                ...prevState.trialPlot,
                 lesnichestvo: opt
             }
         }))
     }
 
-    sasi = (evt, opt) => {
-        console.log('SASSIISSIODJAISJHDOIASDHAISUDH', evt, opt);
-        this.setState(prevState => ({
-            ...prevState,
-            trialPlot: {
-                ...prevState.trialPlot,
-                region: opt
-            }
-        }))
+    sasi = (evt, regionName) => {
+        const {regions} = this.state;
+
+        const region = regions.find(x => x.name === regionName);
+
+        if(region !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    region: region
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputRegion: regionName
+            })
+        }
     }
 
     render() {
@@ -191,12 +206,9 @@ class EditTrialPlot extends React.Component {
             tyms,
             pokrovs,
             forestTypes,
-            pochvas
+            pochvas,
+            inputRegion
         } = this.state;
-
-        console.log('REGIONIIII', regions);
-        
-
 
         return(
             <>
@@ -352,7 +364,7 @@ class EditTrialPlot extends React.Component {
                                             options={[]}
                                             getOptionLabel={option => option.name}
                                             id="tym"
-                                            inputValue={trialPlot == null ? [] : trialPlot.tym.name}
+                                            inputValue={trialPlot == null ? '' : trialPlot.tym.name}
                                             renderInput={params => 
                                             {
                                                 return <TextField
@@ -370,7 +382,7 @@ class EditTrialPlot extends React.Component {
                                             className="tym"
                                             options={[]}
                                             getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? [] : trialPlot.pokrov.name}
+                                            inputValue={trialPlot == null ? '' : trialPlot.pokrov.name}
                                             id="pokrov"
                                             renderInput={params => 
                                             {
@@ -411,7 +423,7 @@ class EditTrialPlot extends React.Component {
                                             className="tym"
                                             options={[]}
                                             getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? [] : trialPlot.forestType.name}
+                                            inputValue={trialPlot == null ? '' : trialPlot.forestType.name}
                                             id="pokrov"
                                             renderInput={params => 
                                             {
@@ -430,7 +442,7 @@ class EditTrialPlot extends React.Component {
                                             className="tym"
                                             options={[]}
                                             getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? [] : trialPlot.pochva.name}
+                                            inputValue={trialPlot == null ? '' : trialPlot.pochva.name}
                                             id="pochva"
                                             renderInput={params => 
                                             {
@@ -472,11 +484,11 @@ class EditTrialPlot extends React.Component {
                                     <div className="inner-select">
                                         <Autocomplete
                                             className="dropdown"
-                                            options={regions == [] ? [] : regions}
+                                            options={regions}
                                             getOptionLabel={option => option.name}
                                             id="regions"
                                             onChange={this.regionOnChange}
-                                            inputValue={trialPlot == null ? '' : trialPlot.region.name}
+                                            inputValue={inputRegion}
                                             onInputChange={this.sasi}
                                             renderInput={params => 
                                             {
@@ -615,7 +627,7 @@ class EditTrialPlot extends React.Component {
                                         options={[]}
                                         getOptionLabel={option => option.name}
                                         id="tym"
-                                        inputValue={trialPlot == null ? [] : trialPlot.tym.name}
+                                        inputValue={trialPlot == null ? '' : trialPlot.tym.name}
                                         renderInput={params => 
                                         {
                                             return <TextField
@@ -633,7 +645,7 @@ class EditTrialPlot extends React.Component {
                                         className="tym"
                                         options={[]}
                                         getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? [] : trialPlot.pokrov.name}
+                                        inputValue={trialPlot == null ? '' : trialPlot.pokrov.name}
                                         id="pokrov"
                                         renderInput={params => 
                                         {
@@ -676,7 +688,7 @@ class EditTrialPlot extends React.Component {
                                         className="tym"
                                         options={[]}
                                         getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? [] : trialPlot.forestType.name}
+                                        inputValue={trialPlot == null ? '' : trialPlot.forestType.name}
                                         id="pokrov"
                                         renderInput={params => 
                                         {
@@ -695,7 +707,7 @@ class EditTrialPlot extends React.Component {
                                         className="tym"
                                         options={[]}
                                         getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? [] : trialPlot.pochva.name}
+                                        inputValue={trialPlot == null ? '' : trialPlot.pochva.name}
                                         id="pochva"
                                         renderInput={params => 
                                         {

@@ -168,7 +168,8 @@ class TrialPlot extends React.Component {
     sendRequest = data => {
         TrialPlotService.createTrialPlot(data).then(response =>
         {
-            this.props.history.push(appRoutes.editTrialPage, response);
+            this.props.history.push(`${appRoutes.editTrialPage}/${response.id}`, response);
+            window.scroll(0, 0);
         });
     }
 
