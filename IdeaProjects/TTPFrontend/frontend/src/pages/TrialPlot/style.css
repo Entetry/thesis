@@ -14,11 +14,12 @@
 
 .card-title {
     display: flex;
-    justify-content: start;
+    justify-content: space-around;
 }
 
 .plot-info {
     display: flex;
+    margin-top: 59px;
 }
 
 .info {
@@ -49,10 +50,6 @@
     justify-content: space-between;
 }
 
-.inputs p {
-    margin-right: 289px !important;
-}
-
 .inner-inputs {
     margin-right: 86px;
 }
@@ -62,18 +59,24 @@
     width: 273px;
 }
 
+
+#g {
+    display: flex;
+}
+
 #padded-form {
-    padding: 100px;
+    margin: 100px;
+    border: 2px solid black;
 }
 
 #submit-trial-plot-btn {
     background-color: #588c0d;
-    width: 261px;
-    height: 110px;
-    margin-left: 359px;
-    margin-top: 100px;
+    width: 233px;
+    height: 70px;
     border-radius: 38px;
     color: white;
     font-family: Roboto Condensed;
     font-size: 24px;
+    margin-top: 36px;
+
 }

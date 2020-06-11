@@ -18,6 +18,13 @@ class EditTrialPlot extends React.Component {
         pochvas: [],
         inputRegion: '',
         inputRayon: '',
+        inputPlho: '',
+        inputLeshos: '',
+        inputLesnichestvo: '',
+        inputTym: '',
+        inputPokrov: '',
+        inputForestType: '',
+        inputPochva: '',
     }
 
     async componentDidMount() {
@@ -26,7 +33,14 @@ class EditTrialPlot extends React.Component {
         this.setState({
             trialPlot: localTrialPlot,
             inputRegion: localTrialPlot.region.name,
-            inputRayon: localTrialPlot.rayon.name
+            inputRayon: localTrialPlot.rayon.name,
+            inputPlho: localTrialPlot.plho.plho,
+            inputLeshos: localTrialPlot.leshos.name,
+            inputLesnichestvo: localTrialPlot.lesnichestvo.name,
+            inputTym: localTrialPlot.tym.name,
+            inputPokrov: localTrialPlot.pokrov.name,
+            inputForestType: localTrialPlot.forestType.name,
+            inputPochva: localTrialPlot.pochva.name,
         });
     }
 
@@ -90,6 +104,8 @@ class EditTrialPlot extends React.Component {
                 tym: opt
             }
         }))
+
+        this.setState({inputTym: opt == undefined ? '' : opt.name});
     }
 
     pokrovOnChange = (e, opt) => {
@@ -101,6 +117,8 @@ class EditTrialPlot extends React.Component {
                 pokrov: opt
             }
         }))
+
+        this.setState({inputPokrov: opt == undefined ? '' : opt.name});
     }
 
     forestTypeOnChange = (e, opt) => {
@@ -112,6 +130,8 @@ class EditTrialPlot extends React.Component {
                 forestType: opt
             }
         }))
+
+        this.setState({inputForestType: opt == undefined ? '' : opt.name});
     }
 
     pochvaOnChange = (e, opt) => {
@@ -123,6 +143,8 @@ class EditTrialPlot extends React.Component {
                 pochva: opt
             }
         }))
+        
+        this.setState({inputPochva: opt == undefined ? '' : opt.name});
     } 
 
     regionOnChange = (e, opt) => {
@@ -152,6 +174,7 @@ class EditTrialPlot extends React.Component {
     }
 
     PLHOOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlot: {
@@ -159,9 +182,12 @@ class EditTrialPlot extends React.Component {
                 plho: opt
             }
         }))
+
+        this.setState({inputPlho: opt == undefined ? '' : opt.plho})
     }
 
     lesHosOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlot: {
@@ -169,9 +195,12 @@ class EditTrialPlot extends React.Component {
                 leshos: opt
             }
         }))
+
+        this.setState({inputLeshos: opt == undefined ? '' : opt.name})
     }
 
     lesnichestvoOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlot: {
@@ -179,6 +208,8 @@ class EditTrialPlot extends React.Component {
                 lesnichestvo: opt
             }
         }))
+
+        this.setState({inputLesnichestvo: opt == undefined ? '' : opt.name})
     }
 
     regionInputChange = (evt, name) => {
@@ -203,12 +234,8 @@ class EditTrialPlot extends React.Component {
 
     rayonInputChange = (evt, name) => {
         const {regions, trialPlot} = this.state;
-        // const region = regions.find(x => x.rayonList.filter(y => y.name == name));
         
         const region = regions.find(x => x.name == trialPlot.region.name).rayonList.find(y => y.name == name);
-
-        console.log('REGION', region);
-        
         
         if(region !== undefined){
             this.setState(prevState => ({
@@ -226,6 +253,147 @@ class EditTrialPlot extends React.Component {
         }
     }
 
+    plhoInputChange = (evt, name) => {
+        const {regions, trialPlot} = this.state;
+        
+        const region = regions.find(x => x.name == trialPlot.region.name).plhoList.find(y => y.name == name);
+        
+        if(region !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    plho: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputPlho: name
+            })
+        }
+    }
+
+    leshosInputChange = (evt, name) => {
+        const {lesHoses} = this.state;
+        const leshos = lesHoses.find(x => x.name === name);
+
+        if(leshos !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    leshos: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputLeshos: name
+            })
+        }
+    }
+
+    lesnichestvoInputChange = (evt, name) => {
+        const {lesnichestvas} = this.state;
+        const lesnichestvo = lesnichestvas.find(x => x.name === name);
+
+        if(lesnichestvo !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    lesnichestvo: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputLesnichestvo: name
+            })
+        }
+    }
+
+    tymInputChange = (evt, name) => {
+        const {tyms} = this.state;
+        const tym = tyms.find(x => x.name === name);
+
+        if(tym !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    tym: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputTym: name
+            })
+        }
+    }
+
+    pokrovInputChange = (evt, name) => {
+        const {pokrovs} = this.state;
+        const pokrov = pokrovs.find(x => x.name === name);
+
+        if(pokrov !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    pokrov: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputPokrov: name
+            })
+        }
+    }
+
+    forestTypeInputChange = (evt, name) => {
+        const {forestTypes} = this.state;
+        const forestType = forestTypes.find(x => x.name === name);
+
+        if(forestType !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    forestType: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputForestType: name
+            })
+        }
+    }
+
+    pochvaInputChange = (evt, name) => {
+        const {pochvas} = this.state;
+        const pochva = pochvas.find(x => x.name === name);
+
+        if(pochva !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    pochva: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputPochva: name
+            })
+        }
+    }
+
     render() {
         const {
             isEditable,
@@ -239,277 +407,293 @@ class EditTrialPlot extends React.Component {
             pochvas,
             inputRegion,
             inputRayon,
+            inputPlho,
+            inputLeshos,
+            inputLesnichestvo,
+            inputTym,
+            inputForestType,
+            inputPokrov,
+            inputPochva
         } = this.state;
 
         return(
             <>
                 <Header />
                 <div id="container">
+                    <div className="bordered">
                         <div style={isEditable ? {display: 'none'} : {}} id="padded-form">
-                        <div className="base-title card-title">
-                            <p>Карточка пробной площади</p>
-                        </div>
-
-                        <div className="plot-info">
-                            <form id="trialForm" noValidate autoComplete="off">
-                                <div className="info base-title">
-                                    <div className="inputs">
-                                        <p>Область</p>
-                                        <div className="inner-select">
-                                            <Autocomplete
-                                                className="dropdown"
-                                                options={[]}
-                                                getOptionLabel={option => option.name}
-                                                id="regions"
-                                                inputValue={trialPlot == null ? '' : trialPlot.region.name}
-                                                renderInput={params => 
-                                                {
-                                                    return <TextField
-                                                    {...params}
-                                                    id="filled-basic"
-                                                    label="Области"
-                                                    className="base-title"
-                                                    type="text"
-                                                    name="regions" />
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Район</p>
-                                        <Autocomplete
-                                                className="dropdown"
-                                                options={[]}
-                                                getOptionLabel={option => option.name}
-                                                inputValue={trialPlot == null ? '' : trialPlot.rayon.name}
-                                                id="rayon"
-                                                renderInput={params => 
-                                                {
-                                                    return <TextField
-                                                    {...params}
-                                                    id="filled-basic"
-                                                    label="Район"
-                                                    className="base-title"
-                                                    type="text"
-                                                    name="rayons" />
-                                                }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>ПЛХО</p>
-                                        <Autocomplete
-                                            className="dropdown"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.plho.plho}
-                                            id="plho"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="ПЛХО"
-                                                className="base-title"
-                                                type="text"
-                                                name="plho" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Лесхоз</p>
-                                        <Autocomplete
-                                            className="dropdown"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.leshos.name}
-                                            id="lesHoses"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Лесхоз"
-                                                className="base-title"
-                                                type="text"
-                                                name="lesHoses" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Лесничество</p>
-                                        <Autocomplete
-                                            className="dropdown"
-                                            options={[]}
-                                            getOptionLabel={option => option.name == null || option.name == undefined ? '' : option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.lesnichestvo.name}
-                                            id="lesnichestvas"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Лесничетсва"
-                                                className="base-title"
-                                                type="text"
-                                                name="lesnichestvas" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Выдел</p>
-                                        <TextField
-                                            className="tym"
-                                            id="standard-basic"
-                                            label="Выдел"
-                                            type="text"
-                                            name="videl"
-                                            value={trialPlot == null ? '' : trialPlot.videl}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Площадь пробы</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Площадь пробы"
-                                            type="text"
-                                            name="ploshadProbi"
-                                            value={trialPlot == null ? '' : trialPlot.ploshadProbi}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Квартал</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Квартал"
-                                            type="text"
-                                            name="kvartal"
-                                            value={trialPlot == null ? '' : trialPlot.kvartal}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>ТУМ</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            id="tym"
-                                            inputValue={trialPlot == null ? '' : trialPlot.tym.name}
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="TYM"
-                                                type="text"
-                                                name="tym" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Покров</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.pokrov.name}
-                                            id="pokrov"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Покров"
-                                                type="text"
-                                                name="pokrov" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Положение и рельеф</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Положение и рельеф"
-                                            type="text"
-                                            name="positionAndRelief"
-                                            value={trialPlot == null ? '' : trialPlot.positionAndRelief}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Особенности древостоя</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Особенности древостоя"
-                                            type="text"
-                                            name="osobennostiDrev"
-                                            value={trialPlot == null ? '' : trialPlot.osobennostiDrev}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Тип леса</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.forestType.name}
-                                            id="pokrov"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Тип леса"
-                                                type="text"
-                                                name="forestType" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Почва</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={[]}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={trialPlot == null ? '' : trialPlot.pochva.name}
-                                            id="pochva"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Почва"
-                                                type="text"
-                                                name="pochva" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Исполнитель</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Испольнитель"
-                                            type="text"
-                                            name="ispolnitel"
-                                            value={trialPlot == null ? '' : trialPlot.ispolnitel}
-                                        />
-                                    </div>
-                                </div>
+                            <div className="base-title card-title">
+                                <p>Карточка пробной площади</p>
                                 <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.editTrialPlot}>
                                     Редактировать
                                 </Button>
-                            </form>
+                            </div>
+                            <div className="plot-info">
+                                <form id="trialForm" noValidate autoComplete="off">
+                                    <div id="g">
+                                        <div className="info base-title">
+                                            <div className="inputs">
+                                                <p>Область</p>
+                                                <div className="inner-select">
+                                                    <Autocomplete
+                                                        className="dropdown"
+                                                        options={[]}
+                                                        getOptionLabel={option => option.name}
+                                                        id="regions"
+                                                        inputValue={trialPlot == null ? '' : trialPlot.region.name}
+                                                        renderInput={params => 
+                                                        {
+                                                            return <TextField
+                                                            {...params}
+                                                            id="filled-basic"
+                                                            label="Области"
+                                                            className="base-title"
+                                                            type="text"
+                                                            name="regions" />
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Район</p>
+                                                <Autocomplete
+                                                        className="dropdown"
+                                                        options={[]}
+                                                        getOptionLabel={option => option.name}
+                                                        inputValue={trialPlot == null ? '' : trialPlot.rayon.name}
+                                                        id="rayon"
+                                                        renderInput={params => 
+                                                        {
+                                                            return <TextField
+                                                            {...params}
+                                                            id="filled-basic"
+                                                            label="Район"
+                                                            className="base-title"
+                                                            type="text"
+                                                            name="rayons" />
+                                                        }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>ПЛХО</p>
+                                                <Autocomplete
+                                                    className="dropdown"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.plho.plho}
+                                                    id="plho"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="ПЛХО"
+                                                        className="base-title"
+                                                        type="text"
+                                                        name="plho" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Лесхоз</p>
+                                                <Autocomplete
+                                                    className="dropdown"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.leshos.name}
+                                                    id="lesHoses"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Лесхоз"
+                                                        className="base-title"
+                                                        type="text"
+                                                        name="lesHoses" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Лесничество</p>
+                                                <Autocomplete
+                                                    className="dropdown"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name == null || option.name == undefined ? '' : option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.lesnichestvo.name}
+                                                    id="lesnichestvas"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Лесничетсва"
+                                                        className="base-title"
+                                                        type="text"
+                                                        name="lesnichestvas" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Выдел</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="standard-basic"
+                                                    label="Выдел"
+                                                    type="text"
+                                                    name="videl"
+                                                    value={trialPlot == null ? '' : trialPlot.videl}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Площадь пробы</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="filled-basic"
+                                                    label="Площадь пробы"
+                                                    type="text"
+                                                    name="ploshadProbi"
+                                                    value={trialPlot == null ? '' : trialPlot.ploshadProbi}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Квартал</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="filled-basic"
+                                                    label="Квартал"
+                                                    type="text"
+                                                    name="kvartal"
+                                                    value={trialPlot == null ? '' : trialPlot.kvartal}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="info base-title">
+                                            <div className="inputs">
+                                                <p>ТУМ</p>
+                                                <Autocomplete
+                                                    className="tym"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    id="tym"
+                                                    inputValue={trialPlot == null ? '' : trialPlot.tym.name}
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="TYM"
+                                                        type="text"
+                                                        name="tym" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Покров</p>
+                                                <Autocomplete
+                                                    className="tym"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.pokrov.name}
+                                                    id="pokrov"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Покров"
+                                                        type="text"
+                                                        name="pokrov" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Положение<br />и рельеф</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="filled-basic"
+                                                    label="Положение и рельеф"
+                                                    type="text"
+                                                    name="positionAndRelief"
+                                                    value={trialPlot == null ? '' : trialPlot.positionAndRelief}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Особенности<br />древостоя</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="filled-basic"
+                                                    label="Особенности древостоя"
+                                                    type="text"
+                                                    name="osobennostiDrev"
+                                                    value={trialPlot == null ? '' : trialPlot.osobennostiDrev}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Тип леса</p>
+                                                <Autocomplete
+                                                    className="tym"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.forestType.name}
+                                                    id="pokrov"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Тип леса"
+                                                        type="text"
+                                                        name="forestType" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Почва</p>
+                                                <Autocomplete
+                                                    className="tym"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.pochva.name}
+                                                    id="pochva"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Почва"
+                                                        type="text"
+                                                        name="pochva" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Исполнитель</p>
+                                                <TextField
+                                                    className="tym"
+                                                    id="filled-basic"
+                                                    label="Испольнитель"
+                                                    type="text"
+                                                    name="ispolnitel"
+                                                    value={trialPlot == null ? '' : trialPlot.ispolnitel}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div style={!isEditable ? {display: 'none'} : {}} id="padded-form">
                         <div className="base-title card-title">
                             <p>Карточка пробной площади</p>
+                            <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.updateTrialPlot}>
+                                Сохранить
+                            </Button>
                         </div>
                         <div className="plot-info">
                             <div className="info base-title">
+                                {/*TODO: add missing inputs to editable mode!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
                                 <div className="inputs">
                                     <p>Область</p>
                                     <div className="inner-select">
@@ -563,9 +747,11 @@ class EditTrialPlot extends React.Component {
                                     <p>ПЛХО</p>
                                     <Autocomplete
                                         className="dropdown"
-                                        options={[]}
-                                        getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.plho.plho}
+                                        options={trialPlot == null ? [] : trialPlot.region.plhoList}
+                                        getOptionLabel={option => option.plho}
+                                        inputValue={inputPlho}
+                                        onChange={this.PLHOOnChange}
+                                        onInputChange={this.plhoInputChange}
                                         id="plho"
                                         renderInput={params => 
                                         {
@@ -583,9 +769,11 @@ class EditTrialPlot extends React.Component {
                                     <p>Лесхоз</p>
                                     <Autocomplete
                                         className="dropdown"
-                                        options={[]}
+                                        options={trialPlot == null ? [] : lesHoses}
                                         getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.leshos.name}
+                                        inputValue={inputLeshos}
+                                        onChange={this.lesHosOnChange}
+                                        onInputChange={this.leshosInputChange}
                                         id="lesHoses"
                                         renderInput={params => 
                                         {
@@ -603,9 +791,11 @@ class EditTrialPlot extends React.Component {
                                     <p>Лесничество</p>
                                     <Autocomplete
                                         className="dropdown"
-                                        options={[]}
+                                        options={trialPlot == null ? [] : lesnichestvas}
                                         getOptionLabel={option => option.name == null || option.name == undefined ? '' : option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.lesnichestvo.name}
+                                        inputValue={inputLesnichestvo}
+                                        onChange={this.lesnichestvoOnChange}
+                                        onInputChange={this.lesnichestvoInputChange}
                                         id="lesnichestvas"
                                         renderInput={params => 
                                         {
@@ -655,122 +845,129 @@ class EditTrialPlot extends React.Component {
                                         onChange={this.inputsOnChange}
                                     />
                                 </div>
-                                <div className="inputs">
-                                    <p>ТУМ</p>
-                                    <Autocomplete
-                                        className="tym"
-                                        options={[]}
-                                        getOptionLabel={option => option.name}
-                                        id="tym"
-                                        inputValue={trialPlot == null ? '' : trialPlot.tym.name}
-                                        renderInput={params => 
-                                        {
-                                            return <TextField
-                                            {...params}
+                                <div className="info base-title">
+                                    <div className="inputs">
+                                        <p>ТУМ</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={tyms}
+                                            getOptionLabel={option => option.name}
+                                            id="tym"
+                                            inputValue={inputTym}
+                                            onChange={this.tymOnChange}
+                                            onInputChange={this.tymInputChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="TYM"
+                                                type="text"
+                                                name="tym" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Покров</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={pokrovs}
+                                            getOptionLabel={option => option.name}
+                                            inputValue={inputPokrov}
+                                            onChange={this.pokrovOnChange}
+                                            onInputChange={this.pokrovInputChange}
+                                            id="pokrov"
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Покров"
+                                                type="text"
+                                                name="pokrov" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Положение<br />и рельеф</p>
+                                        <TextField
+                                            className="tym"
                                             id="filled-basic"
-                                            label="TYM"
+                                            label="Положение и рельеф"
                                             type="text"
-                                            name="tym" />
-                                        }}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Покров</p>
-                                    <Autocomplete
-                                        className="tym"
-                                        options={[]}
-                                        getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.pokrov.name}
-                                        id="pokrov"
-                                        renderInput={params => 
-                                        {
-                                            return <TextField
-                                            {...params}
+                                            name="positionAndRelief"
+                                            value={trialPlot == null ? '' : trialPlot.positionAndRelief}
+                                            onChange={this.inputsOnChange}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Особенности<br />древостоя</p>
+                                        <TextField
+                                            className="tym"
                                             id="filled-basic"
-                                            label="Покров"
+                                            label="Особенности древостоя"
                                             type="text"
-                                            name="pokrov" />
-                                        }}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Положение и рельеф</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Положение и рельеф"
-                                        type="text"
-                                        name="positionAndRelief"
-                                        value={trialPlot == null ? '' : trialPlot.positionAndRelief}
-                                        onChange={this.inputsOnChange}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Особенности древостоя</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Особенности древостоя"
-                                        type="text"
-                                        name="osobennostiDrev"
-                                        value={trialPlot == null ? '' : trialPlot.osobennostiDrev}
-                                        onChange={this.inputsOnChange}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Тип леса</p>
-                                    <Autocomplete
-                                        className="tym"
-                                        options={[]}
-                                        getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.forestType.name}
-                                        id="pokrov"
-                                        renderInput={params => 
-                                        {
-                                            return <TextField
-                                            {...params}
+                                            name="osobennostiDrev"
+                                            value={trialPlot == null ? '' : trialPlot.osobennostiDrev}
+                                            onChange={this.inputsOnChange}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Тип леса</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={forestTypes}
+                                            getOptionLabel={option => option.name}
+                                            inputValue={inputForestType}
+                                            onChange={this.forestTypeOnChange}
+                                            onInputChange={this.forestTypeInputChange}
+                                            id="pokrov"
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Тип леса"
+                                                type="text"
+                                                name="forestType" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Почва</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={pochvas}
+                                            getOptionLabel={option => option.name}
+                                            inputValue={inputPochva}
+                                            onChange={this.pochvaOnChange}
+                                            onInputChange={this.pochvaInputChange}
+                                            id="pochva"
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Почва"
+                                                type="text"
+                                                name="pochva" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Исполнитель</p>
+                                        <TextField
+                                            className="tym"
                                             id="filled-basic"
-                                            label="Тип леса"
+                                            label="Испольнитель"
                                             type="text"
-                                            name="forestType" />
-                                        }}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Почва</p>
-                                    <Autocomplete
-                                        className="tym"
-                                        options={[]}
-                                        getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.pochva.name}
-                                        id="pochva"
-                                        renderInput={params => 
-                                        {
-                                            return <TextField
-                                            {...params}
-                                            id="filled-basic"
-                                            label="Почва"
-                                            type="text"
-                                            name="pochva" />
-                                        }}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Исполнитель</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Испольнитель"
-                                        type="text"
-                                        name="ispolnitel"
-                                        value={trialPlot == null ? '' : trialPlot.ispolnitel}
-                                        onChange={this.inputsOnChange}
-                                    />
+                                            name="ispolnitel"
+                                            value={trialPlot == null ? '' : trialPlot.ispolnitel}
+                                            onChange={this.inputsOnChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.updateTrialPlot}>
-                                Сохранить
-                            </Button>
                         </div>
                     </div>
                 }
