@@ -2,6 +2,10 @@
     width: auto;
 }
 
+#padded-form-create {
+    margin: 100px;
+}
+
 .base-title {
     font-size: 36px;
     font-family: Roboto Condensed !important;
@@ -12,6 +16,11 @@
     justify-content: center;
 }
 
+.edit-font {
+    font-size: 25px;
+    font-family: Roboto Condensed !important;
+}
+
 .card-title {
     display: flex;
     justify-content: space-around;
@@ -19,6 +28,7 @@
 
 .plot-info {
     display: flex;
+    justify-content: center;
     margin-top: 59px;
 }
 
@@ -29,6 +39,10 @@
 
 .info p {
     margin: 5px !important;
+}
+
+.btn {
+    justify-content: center !important;
 }
 
 .dropdown {
@@ -62,11 +76,17 @@
 
 #g {
     display: flex;
+    width: auto;
+    justify-content: space-evenly;
 }
 
 #padded-form {
-    margin: 100px;
+    margin: 47px;
     border: 2px solid black;
+}
+
+#trialForm {
+    width: -webkit-fill-available;
 }
 
 #submit-trial-plot-btn {
@@ -80,3 +100,23 @@
     margin-top: 36px;
 
 }
+
+.poroda-adding {
+    flex-direction: column;
+    width: fit-content;
+}
+
+@media only screen and (max-width: 996px) {
+    #g {
+        flex-direction: column;
+    }
+
+    .plot-info {
+        justify-content: center;
+    }
+
+    .info {
+        width: 600px;
+    }
+}
+

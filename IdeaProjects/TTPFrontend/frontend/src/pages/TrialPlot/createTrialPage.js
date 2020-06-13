@@ -22,9 +22,11 @@ class TrialPlot extends React.Component {
         selectedPLHOName: '',
         selectedLesHosName: '',
         selectedLesnichestvoName: '',
+        poroda: [],
 
         trialPlotRequest: {
             regionId: -1,
+            porodaId: 0,
             rayonId: 0,
             plhoId: 0,
             leshosId: 0,
@@ -50,6 +52,7 @@ class TrialPlot extends React.Component {
         const pokrovs = await TrialPlotService.getAllPokrovs();
         const forestTypes = await TrialPlotService.getAllForestTypes();
         const pochvas = await TrialPlotService.getAllPochvas();
+        const poroda = await TrialPlotService.getAllPoroda();
         
         this.setState({
             regions: regions,
@@ -59,6 +62,7 @@ class TrialPlot extends React.Component {
             pokrovs: pokrovs,
             forestTypes: forestTypes,
             pochvas: pochvas,
+            poroda: poroda
         });
     }
 
@@ -155,6 +159,16 @@ class TrialPlot extends React.Component {
         }))
     }
 
+    porodaOnChange = (e, opt) => {
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                porodaId: opt.id
+            }
+        }))
+    }
+
     lesnichestvoOnChange = (e, opt) => {
         this.setState(prevState => ({
             ...prevState,
@@ -195,7 +209,8 @@ class TrialPlot extends React.Component {
             tyms,
             trialPlotRequest,
             forestTypes,
-            pochvas
+            pochvas,
+            poroda,
         } = this.state;
 
         return(
@@ -205,7 +220,7 @@ class TrialPlot extends React.Component {
                     <div className="base-title title">
                         <p>Создание новой пробной площади</p>
                     </div>
-                    <div id="padded-form">
+                    <div id="padded-form-create">
                         <div className="base-title card-title">
                             <p>Карточка пробной площади</p>
                         </div>
@@ -315,6 +330,17 @@ class TrialPlot extends React.Component {
                                         />
                                     </div>
                                     <div className="inputs">
+                                        <p>Квартал</p>
+                                        <TextField
+                                            className="tym"
+                                            id="filled-basic"
+                                            label="Квартал"
+                                            onChange={this.inputsOnChange}
+                                            type="text"
+                                            name="kvartal"
+                                        />
+                                    </div>
+                                    <div className="inputs">
                                         <p>Выдел</p>
                                         <TextField
                                             className="tym"
@@ -337,17 +363,6 @@ class TrialPlot extends React.Component {
                                         />
                                     </div>
                                     <div className="inputs">
-                                        <p>Квартал</p>
-                                        <TextField
-                                            className="tym"
-                                            id="filled-basic"
-                                            label="Квартал"
-                                            onChange={this.inputsOnChange}
-                                            type="text"
-                                            name="kvartal"
-                                        />
-                                    </div>
-                                    <div className="inputs">
                                         <p>ТУМ</p>
                                         <Autocomplete
                                             className="tym"
@@ -363,6 +378,63 @@ class TrialPlot extends React.Component {
                                                 label="TYM"
                                                 type="text"
                                                 name="tym" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Преобладающая<br/>порода</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={poroda}
+                                            getOptionLabel={option => option.name}
+                                            id="poroda"
+                                            onChange={this.porodaOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Преобладающая порода"
+                                                type="text"
+                                                name="poroda" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Тип леса</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={forestTypes}
+                                            getOptionLabel={option => option.name}
+                                            id="pokrov"
+                                            onChange={this.forestTypeOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Тип леса"
+                                                type="text"
+                                                name="forestType" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Почва</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={pochvas}
+                                            getOptionLabel={option => option.name}
+                                            id="pochva"
+                                            onChange={this.pochvaOnChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Почва"
+                                                type="text"
+                                                name="pochva" />
                                             }}
                                         />
                                     </div>
@@ -408,44 +480,6 @@ class TrialPlot extends React.Component {
                                         />
                                     </div>
                                     <div className="inputs">
-                                        <p>Тип леса</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={forestTypes}
-                                            getOptionLabel={option => option.name}
-                                            id="pokrov"
-                                            onChange={this.forestTypeOnChange}
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Тип леса"
-                                                type="text"
-                                                name="forestType" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
-                                        <p>Почва</p>
-                                        <Autocomplete
-                                            className="tym"
-                                            options={pochvas}
-                                            getOptionLabel={option => option.name}
-                                            id="pochva"
-                                            onChange={this.pochvaOnChange}
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Почва"
-                                                type="text"
-                                                name="pochva" />
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="inputs">
                                         <p>Исполнитель</p>
                                         <TextField
                                             className="tym"
@@ -456,10 +490,13 @@ class TrialPlot extends React.Component {
                                             name="ispolnitel"
                                         />
                                     </div>
+                                    <div className="inputs btn">
+                                        <Button id="submit-trial-plot-btn" variant="contained" type="submit">
+                                            Создать новую ПП
+                                        </Button>
+                                    </div>
                                 </div>
-                                <Button id="submit-trial-plot-btn" variant="contained" type="submit">
-                                    Создать новую ПП
-                                </Button>
+                               
                             </form>
                         </div>
                     </div>

@@ -1,8 +1,10 @@
 import React from 'react';
 import Header from '../../components/Header/header.js';
 import TrialPlotService from '../../services/TrialPlotService';
+import PorodaService from '../../services/PorodaService';
 import { Select, TextField, Button, Input } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import BindingDataTable from '../../components/Table/BindingDataTable/index.js';
 import './style.css';
 
 class EditTrialPlot extends React.Component {
@@ -16,6 +18,7 @@ class EditTrialPlot extends React.Component {
         pokrovs: [],
         forestTypes: [],
         pochvas: [],
+        porodas: [],
         inputRegion: '',
         inputRayon: '',
         inputPlho: '',
@@ -25,22 +28,60 @@ class EditTrialPlot extends React.Component {
         inputPokrov: '',
         inputForestType: '',
         inputPochva: '',
+        inputPoroda: '',
+        isAddPoroda: false,
+        poroda: {
+            porodaId: 0,
+            yarus: 0,
+            pokolenie: 0,
+            plotId: 0,
+            averageAge: 0,
+        },
+        addInputPoroda: '',
     }
 
-    async componentDidMount() {
-        const localTrialPlot = await TrialPlotService.getById(this.props.match.params.id);
+    componentDidMount() {
+        TrialPlotService.getById(this.props.match.params.id).then(x => {
+            this.setState({
+                trialPlot: x,
+                inputRegion: x.region.name,
+                inputRayon: x.rayon.name,
+                inputPlho: x.plho.plho,
+                inputLeshos: x.leshos.name,
+                inputLesnichestvo: x.lesnichestvo.name,
+                inputTym: x.tym.name,
+                inputPokrov: x.pokrov.name,
+                inputForestType: x.forestType.name,
+                inputPochva: x.pochva.name,
+                inputPoroda: x.porodaInfo.name,
+            });
+        }).catch(err => {
+            if(err.status == 404){
+                alert('Пробной площади с заданным Id не существует');
+                this.props.history.push('/main');
+            }
+            else if(err.status == 500){
+                alert('Непредвиденная ошибка. Обратитесь к Администратору');
+                this.props.history.push('/main');
+            }
+        });
+
+        TrialPlotService.getAllPoroda().then(porodas => {
+            this.setState({
+                porodas,
+            });
+        });
+    }
+
+    porodaOnChangeField = e => {
+        const state = this.state;
 
         this.setState({
-            trialPlot: localTrialPlot,
-            inputRegion: localTrialPlot.region.name,
-            inputRayon: localTrialPlot.rayon.name,
-            inputPlho: localTrialPlot.plho.plho,
-            inputLeshos: localTrialPlot.leshos.name,
-            inputLesnichestvo: localTrialPlot.lesnichestvo.name,
-            inputTym: localTrialPlot.tym.name,
-            inputPokrov: localTrialPlot.pokrov.name,
-            inputForestType: localTrialPlot.forestType.name,
-            inputPochva: localTrialPlot.pochva.name,
+            ...state,
+            poroda: {
+                ...state.poroda,
+                [e.target.name]: e.target.value
+            },
         });
     }
 
@@ -55,15 +96,18 @@ class EditTrialPlot extends React.Component {
                         TrialPlotService.getAllPokrovs().then(pokrovs => {
                             TrialPlotService.getAllForestTypes().then(forestTypes => {
                                 TrialPlotService.getAllPochvas().then(pochvas => {
-                                    this.setState({
-                                        regions,
-                                        lesHoses,
-                                        lesnichestvas,
-                                        tyms,
-                                        pokrovs,
-                                        forestTypes,
-                                        pochvas,
-                                        isEditable: !isEditable
+                                    TrialPlotService.getAllPoroda().then(porodas => {
+                                        this.setState({
+                                            regions,
+                                            lesHoses,
+                                            lesnichestvas,
+                                            tyms,
+                                            pokrovs,
+                                            forestTypes,
+                                            pochvas,
+                                            porodas,
+                                            isEditable: !isEditable
+                                        });
                                     });
                                 });
                             });
@@ -75,7 +119,6 @@ class EditTrialPlot extends React.Component {
     }
 
     inputsOnChange = e => {
-        console.log('HYU', e.target, e.target.value);
         const state = this.state;
 
         this.setState({
@@ -88,10 +131,10 @@ class EditTrialPlot extends React.Component {
     }
 
     updateTrialPlot = () => {
-        const {trialPlot} = this.state;
+        const {trialPlot, isEditable} = this.state;
 
         TrialPlotService.updateTrialPlot(trialPlot).then(response => {
-            this.setState({trialPlot: trialPlot})            
+            this.setState({trialPlot: trialPlot, isEditable: !isEditable})   
         })
     }
 
@@ -106,6 +149,19 @@ class EditTrialPlot extends React.Component {
         }))
 
         this.setState({inputTym: opt == undefined ? '' : opt.name});
+    }
+
+    porodaOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlot: {
+                ...prevState.trialPlot,
+                porodaInfo: opt
+            }
+        }))
+
+        this.setState({inputPoroda: opt == undefined ? '' : opt.name});
     }
 
     pokrovOnChange = (e, opt) => {
@@ -210,6 +266,19 @@ class EditTrialPlot extends React.Component {
         }))
 
         this.setState({inputLesnichestvo: opt == undefined ? '' : opt.name})
+    }
+
+    porodaAddOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
+        this.setState(prevState => ({
+            ...prevState,
+            poroda: {
+                ...prevState.poroda,
+                porodaId: opt.id
+            }
+        }))
+
+        this.setState({addInputPoroda: opt == undefined ? '' : opt.name})
     }
 
     regionInputChange = (evt, name) => {
@@ -394,6 +463,66 @@ class EditTrialPlot extends React.Component {
         }
     }
 
+    porodaInputChange = (evt, name) => {
+        const {porodas} = this.state;
+        const poroda = porodas.find(x => x.name === name);
+
+        if(poroda !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                trialPlot: {
+                    ...prevState.trialPlot,
+                    porodaInfo: name
+                }
+            }))
+        }
+        else{
+            this.setState({
+                inputPoroda: name
+            })
+        }
+    }
+
+    porodaChange = () => {
+        const {isAddPoroda} = this.state;
+        this.setState({isAddPoroda: !isAddPoroda})
+    }
+
+    porodaAddInputChange = (evt, name) => {
+        const {porodas} = this.state;
+        const poroda = porodas.find(x => x.name === name);
+
+        if(poroda !== undefined){
+            this.setState(prevState => ({
+                ...prevState,
+                poroda: {
+                    ...prevState.poroda,
+                    porodaId: poroda.id
+                }
+            }))
+        }
+        else{
+            this.setState({
+                addInputPoroda: name
+            })
+        }
+    }
+
+    savePoroda = () => {
+        const {poroda, trialPlot} = this.state;
+
+        poroda.plotId = trialPlot.id;
+        
+        console.log(poroda);
+        
+
+        PorodaService.savePoroda(poroda).then(x => {
+            const {isAddPoroda} = this.state;
+
+            this.setState({isAddPoroda: !isAddPoroda});
+        })
+    }
+
     render() {
         const {
             isEditable,
@@ -413,7 +542,12 @@ class EditTrialPlot extends React.Component {
             inputTym,
             inputForestType,
             inputPokrov,
-            inputPochva
+            inputPochva,
+            inputPoroda,
+            addInputPoroda,
+            porodas,
+            isAddPoroda,
+            poroda,
         } = this.state;
 
         return(
@@ -431,7 +565,7 @@ class EditTrialPlot extends React.Component {
                             <div className="plot-info">
                                 <form id="trialForm" noValidate autoComplete="off">
                                     <div id="g">
-                                        <div className="info base-title">
+                                        <div className="info edit-font">
                                             <div className="inputs">
                                                 <p>Область</p>
                                                 <div className="inner-select">
@@ -568,7 +702,7 @@ class EditTrialPlot extends React.Component {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="info base-title">
+                                        <div className="info edit-font">
                                             <div className="inputs">
                                                 <p>ТУМ</p>
                                                 <Autocomplete
@@ -585,6 +719,25 @@ class EditTrialPlot extends React.Component {
                                                         label="TYM"
                                                         type="text"
                                                         name="tym" />
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="inputs">
+                                                <p>Преобладающая<br />порода</p>
+                                                <Autocomplete
+                                                    className="tym"
+                                                    options={[]}
+                                                    getOptionLabel={option => option.name}
+                                                    inputValue={trialPlot == null ? '' : trialPlot.porodaInfo.name}
+                                                    id="poroda"
+                                                    renderInput={params => 
+                                                    {
+                                                        return <TextField
+                                                        {...params}
+                                                        id="filled-basic"
+                                                        label="Преобладающая порода"
+                                                        type="text"
+                                                        name="poroda" />
                                                     }}
                                                 />
                                             </div>
@@ -682,8 +835,83 @@ class EditTrialPlot extends React.Component {
                                     </div>
                                 </form>
                             </div>
+
+                        </div>
+
+                        <div style={{ margin: "50px", border: "2px solid black" }}>
+                            <BindingDataTable
+                                trialPlotId={trialPlot == null ? '' : trialPlot.id}
+                                geoData={trialPlot == null ? [] : trialPlot.geodataList}
+                            />
+                        </div>
+
+
+                        <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.porodaChange}>Добавить породу</Button>
+                        <div style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
+                            <div className="poroda-adding">
+                                <div className="inputs">
+                                        <p>Порода</p>
+                                        <Autocomplete
+                                            className="dropdown"
+                                            options={porodas}
+                                            getOptionLabel={option => option.name}
+                                            inputValue={addInputPoroda}
+                                            onInputChange={this.porodaAddInputChange}
+                                            onChange={this.porodaAddOnChange}
+                                            id="addPoroda"
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Порода"
+                                                type="text"
+                                                name="addPoroda" />
+                                            }}
+                                        />
+                                    </div>
+                                
+                                <div className="inputs">
+                                    <p>Ярус</p>
+                                    <TextField
+                                        className="tym"
+                                        id="filled-basic"
+                                        label="Ярус"
+                                        type="text"
+                                        name="yarus"
+                                        value={poroda.yarus}
+                                        onChange={this.porodaOnChangeField}
+                                    />
+                                </div>
+                                <div className="inputs">
+                                    <p>Поколение</p>
+                                    <TextField
+                                        className="tym"
+                                        id="filled-basic"
+                                        label="Поколение"
+                                        type="text"
+                                        name="pokolenie"
+                                        value={poroda.pokolenie}
+                                        onChange={this.porodaOnChangeField}
+                                    />
+                                </div>
+                                <div className="inputs">
+                                    <p>Средний возраст</p>
+                                    <TextField
+                                        className="tym"
+                                        id="filled-basic"
+                                        label="Средний возраст"
+                                        type="text"
+                                        name="averageAge"
+                                        value={poroda.averageAge}
+                                        onChange={this.porodaOnChangeField}
+                                    />
+                                </div>
+                            </div>
+                            <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.savePoroda}>Сохранить породу</Button>
                         </div>
                     </div>
+
                     <div style={!isEditable ? {display: 'none'} : {}} id="padded-form">
                         <div className="base-title card-title">
                             <p>Карточка пробной площади</p>
@@ -693,7 +921,6 @@ class EditTrialPlot extends React.Component {
                         </div>
                         <div className="plot-info">
                             <div className="info base-title">
-                                {/*TODO: add missing inputs to editable mode!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/}
                                 <div className="inputs">
                                     <p>Область</p>
                                     <div className="inner-select">
@@ -868,6 +1095,27 @@ class EditTrialPlot extends React.Component {
                                         />
                                     </div>
                                     <div className="inputs">
+                                        <p>Преобладающая<br />порода</p>
+                                        <Autocomplete
+                                            className="tym"
+                                            options={porodas}
+                                            getOptionLabel={option => option.name}
+                                            id="poroda"
+                                            inputValue={inputPoroda}
+                                            onChange={this.porodaOnChange}
+                                            onInputChange={this.porodaInputChange}
+                                            renderInput={params => 
+                                            {
+                                                return <TextField
+                                                {...params}
+                                                id="filled-basic"
+                                                label="Преобладающая порода"
+                                                type="text"
+                                                name="poroda" />
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="inputs">
                                         <p>Покров</p>
                                         <Autocomplete
                                             className="tym"
@@ -970,7 +1218,6 @@ class EditTrialPlot extends React.Component {
                             </div>
                         </div>
                     </div>
-                }
                 </div>
             </>
         )

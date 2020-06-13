@@ -70,7 +70,7 @@ const getById = id => {
     return request({
         method: 'GET',
         url: `/trialplots/${id}`
-    }).then(data => data)
+    });
 }
 
 const updateTrialPlot = requestData => {
@@ -79,6 +79,13 @@ const updateTrialPlot = requestData => {
         url: '/trialplots/',
         data: requestData
     }).then(response => response);
+}
+
+const getAllPoroda = () => {
+    return request({
+        method: 'GET',
+        url: '/baseInfo/porodaInfo'
+    });
 }
 
 const TrialPlotService = {
@@ -92,7 +99,8 @@ const TrialPlotService = {
     getAllForestTypes,
     getAllPochvas,
     getById,
-    updateTrialPlot
+    updateTrialPlot,
+    getAllPoroda
 }
 
 export default TrialPlotService;
