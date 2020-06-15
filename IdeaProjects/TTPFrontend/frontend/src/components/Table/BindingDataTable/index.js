@@ -38,14 +38,14 @@ const tableIcons = {
   };
 
 const columns = [
-    {title: 'Номер', field: 'number'},
-    {title: 'X', field: 'x'},
-    {title: 'Y', field: 'y'},
-    {title: 'Угол направления', field: 'directionAngle'},
-    {title: 'Горизонтальное расстояние', field: 'horizontalDistance'},
-    {title: 'Внутренний угол', field: 'insideAngle'},
+    {title: 'Номер', field: 'number', type: 'numeric',},
+    {title: 'X', field: 'x', type: 'numeric'},
+    {title: 'Y', field: 'y', type: 'numeric'},
+    {title: 'Угол направления', field: 'directionAngle', type: 'numeric'},
+    {title: 'Горизонтальное расстояние', field: 'horizontalDistance', type: 'numeric'},
+    {title: 'Внутренний угол', field: 'insideAngle', type: 'numeric'},
     // {title: 'Привязка', field: 'isBindingLine'},
-    {title: 'Румб', field: 'rhumb'},
+    {title: 'Румб', field: 'rhumb', type: 'numeric'},
 ];
 
 class BindingDataTable extends React.Component {
@@ -76,13 +76,10 @@ render(){
                     data.trialPlotId = trialPlotId;
                     GeoDataService.createGeoData(data).then(response => {
                         resolve();
-                        alert('ROW ADDED', response);
                         this.setState({geoData: [...geoData, response]});
                     });
                 }),
                 onRowUpdate: (newData, oldData) => new Promise((resolve) => {
-                    console.log('NEW DATA', newData);
-                    console.log('OLD DATA', oldData);
                     GeoDataService.editGeoData(newData).then(resp => {
                         resolve();
                         let t = [...geoData];
@@ -92,7 +89,6 @@ render(){
                                 this.setState({geoData: t})
                             }
                         })
-                        alert('ROW UPDATE');
                     })
                     
                 }),
@@ -102,13 +98,11 @@ render(){
                         let t = [...geoData];
                         geoData.forEach((x, i) => {
                             if(x.id == oldData.id){
-                                t.splice(i);
+                                t.splice(i, 1);
                                 this.setState({geoData: t});
                             }
                         });
-                        alert('ROW DELETE');
                     })
-                    
                 }),
             }}
             options={{

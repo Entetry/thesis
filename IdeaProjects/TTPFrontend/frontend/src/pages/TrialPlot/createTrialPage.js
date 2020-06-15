@@ -225,7 +225,7 @@ class TrialPlot extends React.Component {
                             <p>Карточка пробной площади</p>
                         </div>
                         <div className="plot-info">
-                            <form id="trialForm" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+                            <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
                                 <div className="info base-title">
                                     <div className="inputs">
                                         <p>Область</p>

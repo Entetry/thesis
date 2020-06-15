@@ -5,6 +5,8 @@ import PorodaService from '../../services/PorodaService';
 import { Select, TextField, Button, Input } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import BindingDataTable from '../../components/Table/BindingDataTable/index.js';
+import TreesCountTable from '../../components/Table/TreesCountTable';
+import HeightMeasureTable from '../../components/Table/HeightMeasureTable';
 import './style.css';
 
 class EditTrialPlot extends React.Component {
@@ -29,6 +31,7 @@ class EditTrialPlot extends React.Component {
         inputForestType: '',
         inputPochva: '',
         inputPoroda: '',
+        toRemoveTableState: true,
         isAddPoroda: false,
         poroda: {
             porodaId: 0,
@@ -38,9 +41,10 @@ class EditTrialPlot extends React.Component {
             averageAge: 0,
         },
         addInputPoroda: '',
+        isHeightMeasureTableVisible: false,
     }
 
-    componentDidMount() {
+    fetchInitialData = () => {
         TrialPlotService.getById(this.props.match.params.id).then(x => {
             this.setState({
                 trialPlot: x,
@@ -71,6 +75,10 @@ class EditTrialPlot extends React.Component {
                 porodas,
             });
         });
+    }
+
+    componentDidMount() {
+        this.fetchInitialData();
     }
 
     porodaOnChangeField = e => {
@@ -508,19 +516,31 @@ class EditTrialPlot extends React.Component {
         }
     }
 
+    showHeightMeasureTable = () => {
+        const {isHeightMeasureTableVisible, toRemoveTableState} = this.state;
+
+        this.setState({isHeightMeasureTableVisible: !isHeightMeasureTableVisible, toRemoveTableState: !toRemoveTableState});
+    }
+
     savePoroda = () => {
         const {poroda, trialPlot} = this.state;
-
         poroda.plotId = trialPlot.id;
-        
-        console.log(poroda);
-        
 
         PorodaService.savePoroda(poroda).then(x => {
             const {isAddPoroda} = this.state;
 
             this.setState({isAddPoroda: !isAddPoroda});
+            // window.location.reload(false);
+            this.fetchInitialData();
         })
+    }
+
+    deletePoroda = poroda => {
+        PorodaService.deletePoroda(poroda.id).then(response => {
+            // window.location.reload(false);
+            this.fetchInitialData();
+        });
+        
     }
 
     render() {
@@ -548,10 +568,12 @@ class EditTrialPlot extends React.Component {
             porodas,
             isAddPoroda,
             poroda,
+            toRemoveTableState,
+            isHeightMeasureTableVisible,
         } = this.state;
 
         return(
-            <>
+            <div className={isHeightMeasureTableVisible ? "faded" : ""}>
                 <Header />
                 <div id="container">
                     <div className="bordered">
@@ -838,80 +860,106 @@ class EditTrialPlot extends React.Component {
 
                         </div>
 
-                        <div style={{ margin: "50px", border: "2px solid black" }}>
+                        <div style={isEditable ? {display: 'none'} : {}} className="editable-table">
                             <BindingDataTable
                                 trialPlotId={trialPlot == null ? '' : trialPlot.id}
                                 geoData={trialPlot == null ? [] : trialPlot.geodataList}
                             />
                         </div>
 
+                        <div style={isEditable ? {display: 'none'} : {}}>
+                            {trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
+                                return (
+                                    <div key={i} className="editable-table">
+                                        <div className="poroda-info">
+                                            <div>
+                                                <p className="poroda-info-title">Порода:</p>
+                                                <p>{poroda.poroda.name}</p>
+                                            </div>
+                                            <div>
+                                                <p className="poroda-info-title">Ярус:</p>
+                                                <p>{poroda.yarus}</p>
+                                            </div>
+                                            <div>
+                                                <p className="poroda-info-title">Поколение:</p>
+                                                <p>{poroda.pokolenie}</p>
+                                            </div>
+                                            
+                                            <Button className="delete-poroda-btn" id="submit-trial-plot-btn" variant="contained" type="button" onClick={() => this.deletePoroda(poroda)}>Удалить породу</Button>
+                                        </div>
+                                        <TreesCountTable poroda={poroda}/>
+                                        <HeightMeasureTable poroda={poroda}/>
+                                    </div>
+                                )
+                                }
+                            )}
 
-                        <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.porodaChange}>Добавить породу</Button>
-                        <div style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
-                            <div className="poroda-adding">
-                                <div className="inputs">
-                                        <p>Порода</p>
-                                        <Autocomplete
-                                            className="dropdown"
-                                            options={porodas}
-                                            getOptionLabel={option => option.name}
-                                            inputValue={addInputPoroda}
-                                            onInputChange={this.porodaAddInputChange}
-                                            onChange={this.porodaAddOnChange}
-                                            id="addPoroda"
-                                            renderInput={params => 
-                                            {
-                                                return <TextField
-                                                {...params}
-                                                id="filled-basic"
-                                                label="Порода"
-                                                type="text"
-                                                name="addPoroda" />
-                                            }}
+                            <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.porodaChange}>Добавить породу</Button>
+                            <div style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
+                                <div className="poroda-adding">
+                                    <div className="inputs">
+                                            <p>Порода</p>
+                                            <Autocomplete
+                                                className="dropdown"
+                                                options={porodas}
+                                                getOptionLabel={option => option.name}
+                                                inputValue={addInputPoroda}
+                                                onInputChange={this.porodaAddInputChange}
+                                                onChange={this.porodaAddOnChange}
+                                                id="addPoroda"
+                                                renderInput={params => 
+                                                {
+                                                    return <TextField
+                                                    {...params}
+                                                    id="filled-basic"
+                                                    label="Порода"
+                                                    type="text"
+                                                    name="addPoroda" />
+                                                }}
+                                            />
+                                        </div>
+                                    
+                                    <div className="inputs">
+                                        <p>Ярус</p>
+                                        <TextField
+                                            className="tym"
+                                            id="filled-basic"
+                                            label="Ярус"
+                                            type="text"
+                                            name="yarus"
+                                            value={poroda.yarus}
+                                            onChange={this.porodaOnChangeField}
                                         />
                                     </div>
-                                
-                                <div className="inputs">
-                                    <p>Ярус</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Ярус"
-                                        type="text"
-                                        name="yarus"
-                                        value={poroda.yarus}
-                                        onChange={this.porodaOnChangeField}
-                                    />
+                                    <div className="inputs">
+                                        <p>Поколение</p>
+                                        <TextField
+                                            className="tym"
+                                            id="filled-basic"
+                                            label="Поколение"
+                                            type="text"
+                                            name="pokolenie"
+                                            value={poroda.pokolenie}
+                                            onChange={this.porodaOnChangeField}
+                                        />
+                                    </div>
+                                    <div className="inputs">
+                                        <p>Средний возраст</p>
+                                        <TextField
+                                            className="tym"
+                                            id="filled-basic"
+                                            label="Средний возраст"
+                                            type="text"
+                                            name="averageAge"
+                                            value={poroda.averageAge}
+                                            onChange={this.porodaOnChangeField}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="inputs">
-                                    <p>Поколение</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Поколение"
-                                        type="text"
-                                        name="pokolenie"
-                                        value={poroda.pokolenie}
-                                        onChange={this.porodaOnChangeField}
-                                    />
-                                </div>
-                                <div className="inputs">
-                                    <p>Средний возраст</p>
-                                    <TextField
-                                        className="tym"
-                                        id="filled-basic"
-                                        label="Средний возраст"
-                                        type="text"
-                                        name="averageAge"
-                                        value={poroda.averageAge}
-                                        onChange={this.porodaOnChangeField}
-                                    />
-                                </div>
+                                <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.savePoroda}>Сохранить породу</Button>
                             </div>
-                            <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.savePoroda}>Сохранить породу</Button>
                         </div>
                     </div>
-
                     <div style={!isEditable ? {display: 'none'} : {}} id="padded-form">
                         <div className="base-title card-title">
                             <p>Карточка пробной площади</p>
@@ -1219,7 +1267,7 @@ class EditTrialPlot extends React.Component {
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         )
     }
 }

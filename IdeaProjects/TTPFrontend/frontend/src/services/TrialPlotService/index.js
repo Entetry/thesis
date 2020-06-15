@@ -76,7 +76,7 @@ const getById = id => {
 const updateTrialPlot = requestData => {
     return request({
         method: 'PUT',
-        url: '/trialplots/',
+        url: '/trialplots',
         data: requestData
     }).then(response => response);
 }

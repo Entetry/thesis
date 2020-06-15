@@ -3,7 +3,7 @@
 }
 
 #padded-form-create {
-    margin: 100px;
+    margin: 15px;
 }
 
 .base-title {
@@ -29,7 +29,7 @@
 .plot-info {
     display: flex;
     justify-content: center;
-    margin-top: 59px;
+    margin-top: 27px;
 }
 
 .info {
@@ -106,6 +106,22 @@
     width: fit-content;
 }
 
+.poroda-info {
+    display: flex;
+    margin-left: 48px;
+    justify-content: space-evenly;
+}
+
+.poroda-info div p {
+    font-size: 20px;
+    font-family: Roboto Condensed;
+}
+
+.editable-table {
+    margin: 50px;
+    border: 2px solid black;
+}
+
 @media only screen and (max-width: 996px) {
     #g {
         flex-direction: column;
@@ -119,4 +135,70 @@
         width: 600px;
     }
 }
+
+.popup {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 50% !important;
+}
+
+.not-visible-popup {
+    display: none;
+}
+
+.visible-popup {
+    background-color: white !important;
+    opacity: 1 !important;
+    z-index: 9999;
+}
+
+.faded {
+    background-color: gray !important;
+    opacity: 1 !important;
+    transition: opacity 0.3s !important;
+}
+
+.huy{
+    color: green;
+}
+
+.faded .MuiPaper-root {
+    background-color: gray !important;
+    opacity: 1 !important;
+    transition: opacity 0.3s !important;
+}
+
+ .faded .MTableHeader-header-13 {
+    background-color: gray !important;
+    opacity: 1 !important;
+    transition: opacity 0.3s !important;
+}
+
+.visible-popup .MuiPaper-root {
+    color: rgba(0, 0, 0, 0.87) !important;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !important;
+    background-color: #ffffff !important;
+}
+
+.visible-popup .MTableHeader-header-13 {
+    top: 0 !important;
+    z-index: 10 !important;
+    position: sticky !important;
+    background-color: #ffffff !important;
+}
+
+.visible-popup .MuiPaper-root .MuiPaper-elevation2 .MuiPaper-rounded {
+    top: 0 !important;
+    z-index: 10 !important;
+    position: sticky !important;
+    background-color: #ffffff !important;
+}
+
+.delete-poroda-btn {
+    margin-top: 19px !important;
+}
+
+
 

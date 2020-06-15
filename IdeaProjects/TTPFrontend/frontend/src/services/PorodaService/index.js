@@ -8,8 +8,16 @@ const savePoroda = data => {
     });
 }
 
+const deletePoroda = id => {
+    return request({
+        method: 'DELETE',
+        url: `/poroda/${id}`
+    });
+}
+
 const PorodaService = {
     savePoroda,
+    deletePoroda,
 }
 
 export default PorodaService;
