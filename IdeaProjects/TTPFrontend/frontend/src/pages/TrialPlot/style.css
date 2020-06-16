@@ -200,5 +200,34 @@
     margin-top: 19px !important;
 }
 
+.add-poroda-form {
+    margin: 50px;
+}
+
+#adding-poroda-inner-div {
+    align-items: center;
+    border: 2px solid black;
+    padding: 23px;
+    margin-top: 20px;
+}
+
+#tax-table {
+    border: 2px solid black;
+    margin: 47px;
+}
+
+.centered-cells .MuiTableCell-alignRight {
+    text-align: center;
+    border: 1px solid rgba(224, 224, 224, 1);
+}
+
+.centered-cells .MuiTableCell-body {
+    border: 1px solid rgba(224, 224, 224, 1);
+}
+
+.chart {
+    margin: 47px;
+    border: 2px solid black;
+}
 
 

@@ -88,6 +88,13 @@ const getAllPoroda = () => {
     });
 }
 
+const getCalculatedTrialPlot = id => {
+    return request({
+        method: 'GET',
+        url: `trialplots/${id}/calculated`
+    });
+}
+
 const TrialPlotService = {
     createTrialPlot,
     getAllRayons,
@@ -100,7 +107,8 @@ const TrialPlotService = {
     getAllPochvas,
     getById,
     updateTrialPlot,
-    getAllPoroda
+    getAllPoroda,
+    getCalculatedTrialPlot
 }
 
 export default TrialPlotService;

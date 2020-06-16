@@ -866,36 +866,10 @@ class EditTrialPlot extends React.Component {
                                 geoData={trialPlot == null ? [] : trialPlot.geodataList}
                             />
                         </div>
-
-                        <div style={isEditable ? {display: 'none'} : {}}>
-                            {trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
-                                return (
-                                    <div key={i} className="editable-table">
-                                        <div className="poroda-info">
-                                            <div>
-                                                <p className="poroda-info-title">Порода:</p>
-                                                <p>{poroda.poroda.name}</p>
-                                            </div>
-                                            <div>
-                                                <p className="poroda-info-title">Ярус:</p>
-                                                <p>{poroda.yarus}</p>
-                                            </div>
-                                            <div>
-                                                <p className="poroda-info-title">Поколение:</p>
-                                                <p>{poroda.pokolenie}</p>
-                                            </div>
-                                            
-                                            <Button className="delete-poroda-btn" id="submit-trial-plot-btn" variant="contained" type="button" onClick={() => this.deletePoroda(poroda)}>Удалить породу</Button>
-                                        </div>
-                                        <TreesCountTable poroda={poroda}/>
-                                        <HeightMeasureTable poroda={poroda}/>
-                                    </div>
-                                )
-                                }
-                            )}
-
+                        
+                        <div className="add-poroda-form">
                             <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.porodaChange}>Добавить породу</Button>
-                            <div style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
+                            <div id="adding-poroda-inner-div" style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
                                 <div className="poroda-adding">
                                     <div className="inputs">
                                             <p>Порода</p>
@@ -958,6 +932,34 @@ class EditTrialPlot extends React.Component {
                                 </div>
                                 <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.savePoroda}>Сохранить породу</Button>
                             </div>
+                        </div>
+
+                        <div style={isEditable ? {display: 'none'} : {}}>
+                            {trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
+                                return (
+                                    <div key={i} className="editable-table">
+                                        <div className="poroda-info">
+                                            <div>
+                                                <p className="poroda-info-title">Порода:</p>
+                                                <p>{poroda.poroda.name}</p>
+                                            </div>
+                                            <div>
+                                                <p className="poroda-info-title">Ярус:</p>
+                                                <p>{poroda.yarus}</p>
+                                            </div>
+                                            <div>
+                                                <p className="poroda-info-title">Поколение:</p>
+                                                <p>{poroda.pokolenie}</p>
+                                            </div>
+                                            
+                                            <Button className="delete-poroda-btn" id="submit-trial-plot-btn" variant="contained" type="button" onClick={() => this.deletePoroda(poroda)}>Удалить породу</Button>
+                                        </div>
+                                        <TreesCountTable poroda={poroda}/>
+                                        <HeightMeasureTable poroda={poroda}/>
+                                    </div>
+                                )
+                                }
+                            )}
                         </div>
                     </div>
                     <div style={!isEditable ? {display: 'none'} : {}} id="padded-form">

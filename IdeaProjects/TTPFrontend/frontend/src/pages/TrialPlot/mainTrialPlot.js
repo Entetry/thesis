@@ -3,6 +3,8 @@ import { Select, TextField, Button, Input } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Header from '../../components/Header/header.js';
 import TrialPlotService from '../../services/TrialPlotService/index.js';
+import TaxTable from '../../components/Table/TaxTable/index.js';
+import HeightChart from '../../components/Charts/HeightChart'
 
 
 class MainTrialPlot extends React.Component {
@@ -11,7 +13,7 @@ class MainTrialPlot extends React.Component {
     }
 
     componentDidMount = () => {
-        TrialPlotService.getById(this.props.match.params.id).then(x => {
+        TrialPlotService.getCalculatedTrialPlot(this.props.match.params.id).then(x => {
             this.setState({
                 trialPlot: x,
             });
@@ -25,6 +27,7 @@ class MainTrialPlot extends React.Component {
                 this.props.history.push('/main');
             }
         });
+
     }
 
     editTrialPlot = () => {
@@ -317,6 +320,24 @@ class MainTrialPlot extends React.Component {
                     </form>
                 </div>
             </div>
+
+            <div id="tax-table" className="centered-cells">
+                <TaxTable data={trialPlot == null ? [] : trialPlot.porodaList}/>
+            </div>
+
+
+            {
+                trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
+                    return(
+                        <div key={i} className="chart">
+                            <h1>График высот</h1>
+                            <HeightChart data={poroda.heightMeasureList}/>
+                        </div>
+                    )
+                })
+            }
+            
+
             </>
         )
     }
