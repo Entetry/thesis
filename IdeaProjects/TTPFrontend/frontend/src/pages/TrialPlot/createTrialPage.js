@@ -130,6 +130,7 @@ class TrialPlot extends React.Component {
     }
 
     rayonOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -140,6 +141,7 @@ class TrialPlot extends React.Component {
     }
 
     PLHOOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -150,6 +152,7 @@ class TrialPlot extends React.Component {
     }
 
     lesHosOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -160,6 +163,7 @@ class TrialPlot extends React.Component {
     }
 
     porodaOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -170,6 +174,7 @@ class TrialPlot extends React.Component {
     }
 
     lesnichestvoOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -358,7 +363,8 @@ class TrialPlot extends React.Component {
                                             id="filled-basic"
                                             label="Площадь пробы"
                                             onChange={this.inputsOnChange}
-                                            type="text"
+                                            type="number"
+                                            placeholder="0.0"
                                             name="ploshadProbi"
                                         />
                                     </div>

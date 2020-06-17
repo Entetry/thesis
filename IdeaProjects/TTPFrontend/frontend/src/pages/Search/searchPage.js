@@ -43,9 +43,18 @@ class SearchPage extends React.Component {
                 regionId: opt.id
             }
         }))
+        else
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                regionId: -1
+            }
+        }))
     }
 
     rayonOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -53,9 +62,18 @@ class SearchPage extends React.Component {
                 rayonId: opt.id
             }
         }))
+        else
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                rayonId: -1
+            }
+        }))
     }
 
     lesHosOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -63,9 +81,18 @@ class SearchPage extends React.Component {
                 leshosId: opt.id
             }
         }))
+        else
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                leshosId: -1
+            }
+        }))
     }
 
     lesnichestvoOnChange = (e, opt) => {
+        if(opt != null && opt != undefined)
         this.setState(prevState => ({
             ...prevState,
             trialPlotRequest: {
@@ -73,12 +100,19 @@ class SearchPage extends React.Component {
                 lesnichestvoId: opt.id
             }
         }))
+        else
+        this.setState(prevState => ({
+            ...prevState,
+            trialPlotRequest: {
+                ...prevState.trialPlotRequest,
+                lesnichestvoId: -1
+            }
+        }))
     }
 
     searchTrialPlots = obj => {
         const {trialPlotRequest} = this.state;
         TrialPlotService.searchTrialPlot(trialPlotRequest).then(response => {
-            console.log('RESPONSE', response);
             this.setState({
                 searchResult: response
             });

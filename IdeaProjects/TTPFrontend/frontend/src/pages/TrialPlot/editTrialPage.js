@@ -31,7 +31,6 @@ class EditTrialPlot extends React.Component {
         inputForestType: '',
         inputPochva: '',
         inputPoroda: '',
-        toRemoveTableState: true,
         isAddPoroda: false,
         poroda: {
             porodaId: 0,
@@ -517,9 +516,9 @@ class EditTrialPlot extends React.Component {
     }
 
     showHeightMeasureTable = () => {
-        const {isHeightMeasureTableVisible, toRemoveTableState} = this.state;
+        const {isHeightMeasureTableVisible} = this.state;
 
-        this.setState({isHeightMeasureTableVisible: !isHeightMeasureTableVisible, toRemoveTableState: !toRemoveTableState});
+        this.setState({isHeightMeasureTableVisible: !isHeightMeasureTableVisible});
     }
 
     savePoroda = () => {
@@ -540,7 +539,17 @@ class EditTrialPlot extends React.Component {
             // window.location.reload(false);
             this.fetchInitialData();
         });
-        
+    }
+
+    moveToDetailedInfo = () => {
+        this.props.history.push(`/trialPlot/${this.props.match.params.id}`);
+    }
+
+    deleteTrialPlot = () => {
+        const {trialPlot} = this.state;
+        TrialPlotService.deleteTrialPlot(trialPlot.id).then(response => {
+            this.props.history.push('/main');
+        });
     }
 
     render() {
@@ -568,7 +577,6 @@ class EditTrialPlot extends React.Component {
             porodas,
             isAddPoroda,
             poroda,
-            toRemoveTableState,
             isHeightMeasureTableVisible,
         } = this.state;
 
@@ -577,6 +585,14 @@ class EditTrialPlot extends React.Component {
                 <Header />
                 <div id="container">
                     <div className="bordered">
+                    <div style={isEditable ? {display: 'none'} : {}} className="delete-btn">
+                            <Button id="move-trial-plot-btn" variant="contained" type="button" onClick={this.moveToDetailedInfo}>
+                                Подробнее
+                            </Button>
+                            <Button id="delete-trial-plot-btn" variant="contained" type="button" onClick={this.deleteTrialPlot}>
+                                Удалить
+                            </Button>
+                    </div>
                         <div style={isEditable ? {display: 'none'} : {}} id="padded-form">
                             <div className="base-title card-title">
                                 <p>Карточка пробной площади</p>
@@ -707,7 +723,7 @@ class EditTrialPlot extends React.Component {
                                                     className="tym"
                                                     id="filled-basic"
                                                     label="Площадь пробы"
-                                                    type="text"
+                                                    type="number" placeholder="1.0"
                                                     name="ploshadProbi"
                                                     value={trialPlot == null ? '' : trialPlot.ploshadProbi}
                                                 />
@@ -867,7 +883,7 @@ class EditTrialPlot extends React.Component {
                             />
                         </div>
                         
-                        <div className="add-poroda-form">
+                        <div style={isEditable ? {display: 'none'} : {}} className="add-poroda-form">
                             <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.porodaChange}>Добавить породу</Button>
                             <div id="adding-poroda-inner-div" style={!isAddPoroda ? {display: 'none'} : {}} className="info edit-font">
                                 <div className="poroda-adding">
@@ -923,7 +939,7 @@ class EditTrialPlot extends React.Component {
                                             className="tym"
                                             id="filled-basic"
                                             label="Средний возраст"
-                                            type="text"
+                                            type="number" placeholder="1.0"
                                             name="averageAge"
                                             value={poroda.averageAge}
                                             onChange={this.porodaOnChangeField}
@@ -962,7 +978,10 @@ class EditTrialPlot extends React.Component {
                             )}
                         </div>
                     </div>
+                    
                     <div style={!isEditable ? {display: 'none'} : {}} id="padded-form">
+                        
+                        
                         <div className="base-title card-title">
                             <p>Карточка пробной площади</p>
                             <Button id="submit-trial-plot-btn" variant="contained" type="button" onClick={this.updateTrialPlot}>
@@ -1104,7 +1123,7 @@ class EditTrialPlot extends React.Component {
                                         className="tym"
                                         id="filled-basic"
                                         label="Площадь пробы"
-                                        type="text"
+                                        type="number" placeholder="1.0"
                                         name="ploshadProbi"
                                         value={trialPlot == null ? '' : trialPlot.ploshadProbi}
                                         onChange={this.inputsOnChange}

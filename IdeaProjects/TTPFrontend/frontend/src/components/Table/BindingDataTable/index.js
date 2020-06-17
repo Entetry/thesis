@@ -68,25 +68,28 @@ render(){
             data={geoData}
             editable={{
                 onRowAdd: (data) => new Promise((resolve, reject) => {
-                    if(geoData.length == 4){
-                        alert('Вы не можете добавить больше 4 точек')
+                    if(geoData.length == 5){
+                        alert('Вы не можете добавить больше 5 точек')
                         reject();
                         return;
                     }
                     data.trialPlotId = trialPlotId;
                     GeoDataService.createGeoData(data).then(response => {
+                        console.log('RESPONSE', response);
                         resolve();
 
-                        if(geoData.length == 3) {
-                            const fifthDot = geoData[0];
-                            fifthDot.trialPlotId = trialPlotId;
-                            GeoDataService.createGeoData(fifthDot).then(resp => {
-                                this.setState({geoData: [...geoData, response, resp]});
-                                return;
-                            })
+                        const {geoData: g} = this.state;
+                        if(g.length == 3) {
+                            alert('Пятая точка должна быть замыкающей(такой же как и первая)');
                         }
 
                         this.setState({geoData: [...geoData, response]});
+                    }).catch(err => {
+                        if (err.status == 500) {
+                            reject();
+                            alert('Вы ввели некорректные данные');
+                            return;
+                        }
                     });
                 }),
                 onRowUpdate: (newData, oldData) => new Promise((resolve) => {

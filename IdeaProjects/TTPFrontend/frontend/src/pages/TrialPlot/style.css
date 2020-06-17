@@ -197,6 +197,7 @@
 }
 
 .delete-poroda-btn {
+    background-color: red !important;
     margin-top: 19px !important;
 }
 
@@ -243,4 +244,30 @@
     display: none !important;
 }
 
+#delete-trial-plot-btn {
+    background-color: red;
+    width: 233px;
+    height: 70px;
+    color: white;
+    font-family: Roboto Condensed;
+    font-size: 24px;
+    margin-top: 36px;
+    margin-right: 49px;
+}
+
+.delete-btn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#move-trial-plot-btn {
+    background-color: #588c0d;
+    width: 233px;
+    height: 70px;
+    color: white;
+    font-family: Roboto Condensed;
+    font-size: 24px;
+    margin-top: 36px;
+    margin-right: 49px;
+}
 

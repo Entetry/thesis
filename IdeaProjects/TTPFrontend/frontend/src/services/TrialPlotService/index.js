@@ -96,9 +96,39 @@ const getCalculatedTrialPlot = id => {
 }
 
 const searchTrialPlot = obj => {
+
+    let url = '';
+
+    if(obj == null || obj == undefined)
+        return;
+
+    if (obj.regionId != null) {
+        url = `${url}Oblast:${obj.regionId},`;
+    }
+
+    if (obj.rayonId != null) {
+        url = `${url}Rayon:${obj.rayonId},`;
+    }
+
+    if (obj.leshosId != null) {
+        url = `${url}Leshoz:${obj.leshosId},`;
+    }
+
+    if (obj.lesnichestvoId != null) {
+        url = `${url}Lesnichestvo:${obj.lesnichestvoId}`;
+    }
+
+
     return request({
         method: 'GET',
-        url: `/trialplots?search=Oblast:${obj.regionId},Rayon:${obj.rayonId},Leshoz:${obj.leshosId},Lesnichestvo:${obj.lesnichestvoId}`
+        url: `/trialplots?search=${url}`
+    });
+}
+
+const deleteTrialPlot = id => {
+    return request({
+        method: 'DELETE',
+        url: `/trialplots/${id}`
     });
 }
 
@@ -116,7 +146,8 @@ const TrialPlotService = {
     updateTrialPlot,
     getAllPoroda,
     getCalculatedTrialPlot,
-    searchTrialPlot
+    searchTrialPlot,
+    deleteTrialPlot
 }
 
 export default TrialPlotService;

@@ -101,7 +101,13 @@ render(){
                     PerechetService.savePerechet(data).then(response => {
                         resolve();
                         this.setState({perechetData: [...perechetData, response]});
-                    });
+                    }).catch(err => {
+                        if (err.status == 500) {
+                            reject();
+                            alert('Вы ввели некорректные данные');
+                            return;
+                        }
+                    });;
                 }),
                 onRowUpdate: (newData, oldData) => new Promise((resolve) => {
                     var collection = Object.entries(newData);

@@ -95,7 +95,7 @@ class HeightMeasureTable extends React.Component {
                 onRowAdd: (data) => new Promise((resolve, reject) => {
                     var collection = Object.entries(data);
                     
-                    if(collection.length != 4) {
+                    if(collection.length != 2) {
                         alert('Вы не ввели все поля');
                         resolve();
                         return;
@@ -121,7 +121,13 @@ class HeightMeasureTable extends React.Component {
                     HeightMeasureService.saveHeightMeasure(data).then(response => {
                         resolve();
                         this.setState({heightMeasureData: [...heightMeasureData, response]});
-                    })
+                    }).catch(err => {
+                        if (err.status == 500) {
+                            reject();
+                            alert('Вы ввели некорректные данные');
+                            return;
+                        }
+                    });
                 }),
                 onRowUpdate: (newData, oldData) => new Promise((resolve) => {
                     var collection = Object.entries(newData);
