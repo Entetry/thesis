@@ -95,6 +95,13 @@ const getCalculatedTrialPlot = id => {
     });
 }
 
+const searchTrialPlot = obj => {
+    return request({
+        method: 'GET',
+        url: `/trialplots?search=Oblast:${obj.regionId},Rayon:${obj.rayonId},Leshoz:${obj.leshosId},Lesnichestvo:${obj.lesnichestvoId}`
+    });
+}
+
 const TrialPlotService = {
     createTrialPlot,
     getAllRayons,
@@ -108,7 +115,8 @@ const TrialPlotService = {
     getById,
     updateTrialPlot,
     getAllPoroda,
-    getCalculatedTrialPlot
+    getCalculatedTrialPlot,
+    searchTrialPlot
 }
 
 export default TrialPlotService;

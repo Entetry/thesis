@@ -1,0 +1,21 @@
+.filters {
+    display: flex;
+}
+
+.search-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-family: Roboto Condensed;
+}
+
+.search-btn {
+    margin-top: 39px !important;
+    margin-left: 20px !important;
+}
+
+.bordered-search-form {
+    margin: 47px;
+}

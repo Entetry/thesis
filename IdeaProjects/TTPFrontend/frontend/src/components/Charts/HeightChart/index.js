@@ -1,24 +1,38 @@
 import React from 'react';
 import { ScatterChart } from './ScatterSeries';
+import SplineChart from './SplineChart';
 
 
 class HeightChart extends React.Component {
 
     render() {
-        const {data} = this.props;
+        const {scatterChartData, splineChartData} = this.props;
 
         const scatterDots = [];
+        const splineDots = [];
         //argument - x
         //value - y
-        data.forEach(item => {
+        scatterChartData.forEach(item => {
             scatterDots.push({
                 arg1: item.diameter,
                 val1: item.height
-            })
+            });
         });
 
+        splineChartData.forEach(item => {
+            splineDots.push({
+                height: item.height,
+                diameter: item.stupen
+            });
+        })
+
         return(
-           <ScatterChart data={scatterDots}/>
+            <>
+                <ScatterChart data={scatterDots}/>
+                <div className="spline-chart">
+                    <SplineChart data={splineDots}/>
+                </div>
+           </>
         )
     }
 }

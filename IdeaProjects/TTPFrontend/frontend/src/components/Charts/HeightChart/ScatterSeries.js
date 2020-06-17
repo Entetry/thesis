@@ -14,7 +14,7 @@ export const ScatterChart = props => {
     return(
         <Paper>
             <Chart data={props.data}>
-                <ArgumentAxis showGrid />
+                <ArgumentAxis />
                 <ValueAxis />
                 <ScatterSeries
                     valueField="val1"

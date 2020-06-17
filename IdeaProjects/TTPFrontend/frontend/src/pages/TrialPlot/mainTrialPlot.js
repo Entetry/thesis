@@ -212,7 +212,7 @@ class MainTrialPlot extends React.Component {
                                         className="tym"
                                         options={[]}
                                         getOptionLabel={option => option.name}
-                                        inputValue={trialPlot == null ? '' : trialPlot.porodaInfo.name}
+                                        inputValue={trialPlot == null ? '' : trialPlot.porodaInfo == null ? '' : trialPlot.porodaInfo.name}
                                         id="poroda"
                                         renderInput={params => 
                                         {
@@ -330,8 +330,8 @@ class MainTrialPlot extends React.Component {
                 trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
                     return(
                         <div key={i} className="chart">
-                            <h1>График высот</h1>
-                            <HeightChart data={poroda.heightMeasureList}/>
+                            <h1>График высот: {poroda.poroda.name}</h1>
+                            <HeightChart scatterChartData={poroda.heightMeasureList} splineChartData={poroda.perechetList}/>
                         </div>
                     )
                 })

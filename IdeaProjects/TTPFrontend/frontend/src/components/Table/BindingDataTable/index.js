@@ -76,6 +76,16 @@ render(){
                     data.trialPlotId = trialPlotId;
                     GeoDataService.createGeoData(data).then(response => {
                         resolve();
+
+                        if(geoData.length == 3) {
+                            const fifthDot = geoData[0];
+                            fifthDot.trialPlotId = trialPlotId;
+                            GeoDataService.createGeoData(fifthDot).then(resp => {
+                                this.setState({geoData: [...geoData, response, resp]});
+                                return;
+                            })
+                        }
+
                         this.setState({geoData: [...geoData, response]});
                     });
                 }),
@@ -88,9 +98,8 @@ render(){
                                 t[i] = newData;
                                 this.setState({geoData: t})
                             }
-                        })
+                        });
                     })
-                    
                 }),
                 onRowDelete: (oldData) => new Promise((resolve) => {
                     GeoDataService.deleteGeoData(oldData.id).then(resp => {
