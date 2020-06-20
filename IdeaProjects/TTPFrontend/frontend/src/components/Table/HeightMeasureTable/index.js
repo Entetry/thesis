@@ -93,27 +93,43 @@ class HeightMeasureTable extends React.Component {
             data={heightMeasureData}
             editable={{
                 onRowAdd: (data) => new Promise((resolve, reject) => {
-                    var collection = Object.entries(data);
-                    
-                    if(collection.length != 2) {
-                        alert('Вы не ввели все поля');
-                        resolve();
+                    if (data.height == undefined ||
+                        data.height == null || data.diameter == null ||
+                        data.diameter == undefined) {
+                        alert('Вы ввели не все поля!');
+                        reject();
                         return;
                     }
 
-                    collection.forEach(entry => {
-                        if(entry[1].endsWith(',') || entry[1] == ""){
-                            alert('Неправильно введённое число', entry[0]);
-                            resolve();
-                            return;
-                        }
-                        //use key and value here
-                      });
+                    if (data.height == "") {
+                        data.height = 0;
+                    }
 
+                    if (data.diameter == "") {
+                        data.diameter = 0;
+                    }
+
+                    if (data.height < 0 || data.diameter < 0) {
+                        alert('Значение не может быть отрицательным');
+                        reject();
+                        return;
+                    }
+
+                    if (data.height.toString().endsWith(',')) {
+                        alert('Неправильно введённое число', data.height);
+                        reject();
+                        return;
+                    }
+
+                    if (data.diameter.toString().endsWith(',')) {
+                        alert('Неправильно введённое число', data.diameter);
+                        reject();
+                        return;
+                    }
 
                     if(JSON.stringify(data) == "{}"){
-                        alert('SASI');
-                        resolve();
+                        alert('Пустые данные');
+                        reject();
                         return;
                     }
 
@@ -129,28 +145,34 @@ class HeightMeasureTable extends React.Component {
                         }
                     });
                 }),
-                onRowUpdate: (newData, oldData) => new Promise((resolve) => {
-                    var collection = Object.entries(newData);
-                    
-                    if(collection.length != 4) {
-                        alert('Вы не ввели все поля');
-                        resolve();
+                onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {
+                    if (oldData.diameter == newData.diameter && oldData.height == newData.height) {
+                        reject();
                         return;
                     }
 
-                    collection.forEach(entry => {
-                        if(entry[1].endsWith(',') || entry[1] == ""){
-                            alert('Неправильно введённое число', entry[0]);
-                            resolve();
-                            return;
-                        }
-                        //use key and value here
-                      });
+                    if (newData.height == "" || newData.height == undefined ||
+                        newData.height == null || newData.diameter == "" ||
+                        newData.diameter == null || newData.diameter == undefined) {
+                        alert('Вы ввели не все поля!');
+                        reject();
+                        return;
+                    }
+                    if (newData.height.toString().endsWith(',') || newData.height == "") {
+                        alert('Неправильно введённое число', newData.height);
+                        reject();
+                        return;
+                    }
 
+                    if (newData.diameter.toString().endsWith(',') || newData.diameter == "") {
+                        alert('Неправильно введённое число', newData.diameter);
+                        reject();
+                        return;
+                    }
 
                     if(JSON.stringify(newData) == "{}"){
-                        alert('SASI');
-                        resolve();
+                        alert('Пустые данные');
+                        reject();
                         return;
                     }
 

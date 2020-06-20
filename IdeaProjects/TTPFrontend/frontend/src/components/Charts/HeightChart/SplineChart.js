@@ -35,9 +35,9 @@ class SplineChart extends React.PureComponent {
         <Chart
           data={this.props.data}
         >
-          <ArgumentScale factory={scalePoint} />
+          {/* <ArgumentScale factory={scalePoint} /> */}
           <ArgumentAxis />
-          <ValueAxis />
+          <ValueAxis/>
 
           <LineSeries
             // name="Hydro-electric"

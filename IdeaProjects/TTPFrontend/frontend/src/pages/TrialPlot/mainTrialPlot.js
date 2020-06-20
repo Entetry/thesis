@@ -322,15 +322,20 @@ class MainTrialPlot extends React.Component {
             </div>
 
             <div id="tax-table" className="centered-cells">
+                <div>
+                    <h1>Таксационная характеристика (в пересчёте на 1га)</h1>
+                </div>
                 <TaxTable data={trialPlot == null ? [] : trialPlot.porodaList}/>
             </div>
 
 
             {
                 trialPlot == null ? null : trialPlot.porodaList.map((poroda, i) => {
+                    console.log('PORODA', poroda);
+                    
                     return(
                         <div key={i} className="chart">
-                            <h1>График высот: {poroda.poroda.name}</h1>
+                            <h1>График высот: {poroda.poroda.name}, Яруc: {poroda.yarus}, Поколение: {poroda.pokolenie}</h1>
                             <HeightChart scatterChartData={poroda.heightMeasureList} splineChartData={poroda.perechetList}/>
                         </div>
                     )

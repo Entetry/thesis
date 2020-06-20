@@ -73,27 +73,63 @@ render(){
             data={perechetData}
             editable={{
                 onRowAdd: (data) => new Promise((resolve, reject) => {
-                    var collection = Object.entries(data);
+                    if (data.delovyh.toString() == "" ) {
+                        data.delovyh = 0;
+                    }
                     
-                    if(collection.length != 4) {
-                        alert('Вы не ввели все поля');
-                        resolve();
+                    if (data.delovyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
                         return;
                     }
 
-                    collection.forEach(entry => {
-                        if(entry[1].endsWith(',') || entry[1] == ""){
-                            alert('Неправильно введённое число', entry[0]);
-                            resolve();
-                            return;
-                        }
-                        //use key and value here
-                      });
+                    if (data.stupen.toString() == "" || data.stupen.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
+                        return;
+                    }
 
+                    if (data.drovyanyh.toString() == "") {
+                        data.drovyanyh = 0;
+                    }
 
-                    if(JSON.stringify(data) == "{}"){
-                        alert('SASI');
-                        resolve();
+                    if (data.drovyanyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
+                        return;
+                    }
+
+                    if (data.suhostoynyh.toString() == "") {
+                        data.suhostoynyh = 0;
+                    }
+
+                    if (data.suhostoynyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
+                        return;
+                    }
+
+                    if (+data.suhostoynyh < 0) {
+                        alert('Количество сухостойных не может быть отрицательным');
+                        reject();
+                        return;
+                    }
+
+                    if (+data.drovyanyh < 0) {
+                        alert('Количество дровяных не может быть отрицательным');
+                        reject();
+                        return;
+                    }
+
+                    if (+data.stupen < 0) {
+                        alert('Ступень не может быть отрицательным');
+                        reject();
+                        return;
+                    }
+
+                    if (+data.delovyh < 0) {
+                        alert('Количество деловых не может быть отрицательным');
+                        reject();
                         return;
                     }
 
@@ -109,28 +145,28 @@ render(){
                         }
                     });;
                 }),
-                onRowUpdate: (newData, oldData) => new Promise((resolve) => {
-                    var collection = Object.entries(newData);
-                    
-                    if(collection.length != 4) {
-                        alert('Вы не ввели все поля');
-                        resolve();
+                onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {
+                    if (newData.delovyh.toString() == "" || newData.delovyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
                         return;
                     }
 
-                    collection.forEach(entry => {
-                        if(entry[1].endsWith(',') || entry[1] == ""){
-                            alert('Неправильно введённое число', entry[0]);
-                            resolve();
-                            return;
-                        }
-                        //use key and value here
-                      });
+                    if (newData.stupen.toString() == "" || newData.stupen.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
+                        return;
+                    }
 
+                    if (newData.drovyanyh.toString() == "" || newData.drovyanyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
+                        return;
+                    }
 
-                    if(JSON.stringify(newData) == "{}"){
-                        alert('SASI');
-                        resolve();
+                    if (newData.suhostoynyh.toString() == "" || newData.suhostoynyh.toString().endsWith(',')) {
+                        alert('Неправильно введённое число');
+                        reject();
                         return;
                     }
 

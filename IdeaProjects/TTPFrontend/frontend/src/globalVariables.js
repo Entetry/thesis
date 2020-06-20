@@ -1,4 +1,4 @@
-export const localhost = "http://localhost:8080";
+export const localhost = "http://localhost:56555";
 
 export const appRoutes = {
     search: "/search",

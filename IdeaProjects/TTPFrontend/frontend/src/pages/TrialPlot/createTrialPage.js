@@ -71,6 +71,12 @@ class TrialPlot extends React.Component {
 
         const {trialPlotRequest} = this.state;
 
+        if (trialPlotRequest.ploshadProbi < 0 || trialPlotRequest.ploshadProbi == '' || trialPlotRequest.ploshadProbi == null || trialPlotRequest.ploshadProbi == undefined) {
+            alert('Площадь пробы введена некорректно');
+            return;
+        }
+
+
         this.sendRequest(trialPlotRequest);
     }
 

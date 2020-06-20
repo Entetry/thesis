@@ -42,7 +42,7 @@ class TaxTable extends React.Component {
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map((item, i) => {
+                        {data.sort((a, b) => b.rastStock - a.rastStock).map((item, i) => {
                             const {
                                 poroda,
                                 yarus,

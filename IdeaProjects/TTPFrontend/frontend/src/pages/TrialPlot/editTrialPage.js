@@ -525,6 +525,21 @@ class EditTrialPlot extends React.Component {
         const {poroda, trialPlot} = this.state;
         poroda.plotId = trialPlot.id;
 
+        if (poroda.averageAge < 0 || poroda.averageAge == null || poroda.averageAge == undefined) {
+            alert('Средний возраст введён некорректно');
+            return;
+        }
+
+        if (poroda.yarus < 0 || poroda.yarus == null || poroda.yarus == undefined) {
+            alert('Ярус введён некорректно');
+            return;
+        }
+
+        if (poroda.pokolenie < 0 || poroda.pokolenie == null || poroda.pokolenie == undefined) {
+            alert('Поколение введено некорректно');
+            return;
+        }
+
         PorodaService.savePoroda(poroda).then(x => {
             const {isAddPoroda} = this.state;
 
@@ -966,6 +981,10 @@ class EditTrialPlot extends React.Component {
                                             <div>
                                                 <p className="poroda-info-title">Поколение:</p>
                                                 <p>{poroda.pokolenie}</p>
+                                            </div>
+                                            <div>
+                                                <p className="poroda-info-title">Средний возраст:</p>
+                                                <p>{poroda.averageAge}</p>
                                             </div>
                                             
                                             <Button className="delete-poroda-btn" id="submit-trial-plot-btn" variant="contained" type="button" onClick={() => this.deletePoroda(poroda)}>Удалить породу</Button>
